@@ -21,8 +21,30 @@ const formatDate = (value?: string | null) => {
   });
 };
 
+const coverImage = (article: BlogPost) => article.cover_image_url || "/og-image.jpg";
+const coverAlt = (article: BlogPost) => article.cover_image_alt || `${article.title} - Positana Pflege Hildesheim`;
+
+const ArticleMeta = ({ article }: { article: BlogPost }) => (
+  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+    <span>{article.author_name || "Positana Pflege Team"}</span>
+    {article.published_at && (
+      <>
+        <span aria-hidden="true">·</span>
+        <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
+      </>
+    )}
+    {article.reading_time_minutes && (
+      <>
+        <span aria-hidden="true">·</span>
+        <span>{article.reading_time_minutes} Min. Lesezeit</span>
+      </>
+    )}
+  </div>
+);
+
 const Ratgeber = ({ articles = [] }: { articles?: BlogPost[] }) => {
   useScrollAnimation();
+  const [featuredArticle, ...regularArticles] = articles;
 
   return (
     <>
@@ -39,29 +61,68 @@ const Ratgeber = ({ articles = [] }: { articles?: BlogPost[] }) => {
         {!articles.length ? (
           <p className="text-center text-muted-foreground">Bald finden Sie hier hilfreiche Beiträge.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
-              <Link
-                key={article.id}
-                to={`/ratgeber/${article.slug}`}
-                className="fade-in-section group"
-              >
-                <div className="rounded-2xl border border-border p-6 h-full flex flex-col hover:border-accent/30 transition-colors">
-                  {article.category && (
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full w-fit mb-4 ${categoryColors[article.category] ?? "bg-muted text-foreground"}`}>
-                      {article.category}
-                    </span>
-                  )}
-                  <h3 className="font-serif text-xl mb-3 group-hover:text-accent transition-colors">
-                    {article.title}
-                  </h3>
-                  {article.excerpt && <p className="text-muted-foreground flex-1 mb-4">{article.excerpt}</p>}
-                  {article.published_at && (
-                    <p className="text-sm text-muted-foreground">{formatDate(article.published_at)}</p>
-                  )}
-                </div>
+          <div className="space-y-12">
+            {featuredArticle && (
+              <Link to={`/ratgeber/${featuredArticle.slug}`} className="fade-in-section group block">
+                <article className="grid lg:grid-cols-[1.1fr_0.9fr] overflow-hidden rounded-2xl border border-border bg-background hover:border-accent/30 transition-colors">
+                  <img
+                    src={coverImage(featuredArticle)}
+                    alt={coverAlt(featuredArticle)}
+                    className="aspect-[16/10] h-full w-full object-cover"
+                    loading="eager"
+                  />
+                  <div className="p-6 md:p-8 flex flex-col justify-center">
+                    {featuredArticle.category && (
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full w-fit mb-4 ${categoryColors[featuredArticle.category] ?? "bg-muted text-foreground"}`}>
+                        {featuredArticle.category}
+                      </span>
+                    )}
+                    <h2 className="font-serif text-3xl md:text-4xl mb-4 group-hover:text-accent transition-colors">
+                      {featuredArticle.title}
+                    </h2>
+                    {featuredArticle.excerpt && (
+                      <p className="text-muted-foreground text-lg leading-relaxed mb-5">
+                        {featuredArticle.excerpt}
+                      </p>
+                    )}
+                    <ArticleMeta article={featuredArticle} />
+                  </div>
+                </article>
               </Link>
-            ))}
+            )}
+
+            {regularArticles.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {regularArticles.map((article) => (
+                  <Link
+                    key={article.id}
+                    to={`/ratgeber/${article.slug}`}
+                    className="fade-in-section group"
+                  >
+                    <article className="rounded-2xl border border-border h-full overflow-hidden flex flex-col hover:border-accent/30 transition-colors bg-background">
+                      <img
+                        src={coverImage(article)}
+                        alt={coverAlt(article)}
+                        className="aspect-[16/10] w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="p-6 flex flex-col flex-1">
+                        {article.category && (
+                          <span className={`text-xs font-semibold px-3 py-1 rounded-full w-fit mb-4 ${categoryColors[article.category] ?? "bg-muted text-foreground"}`}>
+                            {article.category}
+                          </span>
+                        )}
+                        <h3 className="font-serif text-xl mb-3 group-hover:text-accent transition-colors">
+                          {article.title}
+                        </h3>
+                        {article.excerpt && <p className="text-muted-foreground flex-1 mb-5">{article.excerpt}</p>}
+                        <ArticleMeta article={article} />
+                      </div>
+                    </article>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

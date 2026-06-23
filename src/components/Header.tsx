@@ -36,6 +36,7 @@ const Header = () => {
         { label: "Verhinderungspflege", path: "/leistungen#verhinderungspflege" },
         { label: "Hausmeisterdienst", path: "/leistungen#hausmeisterdienst" },
         { label: "Betreutes Wohnen", path: "/leistungen#betreutes-wohnen" },
+        { label: "Pflege vor Ort", path: "/pflege/ambulante-pflege-hildesheim" },
       ],
     },
     { label: "Ablauf", path: "/ablauf" },

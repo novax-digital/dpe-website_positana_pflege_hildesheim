@@ -1,0 +1,5 @@
+# Positana Pflege Hildesheim
+
+The canonical LLM context file for this website is:
+
+https://positana-pflege-hildesheim.de/llms.txt

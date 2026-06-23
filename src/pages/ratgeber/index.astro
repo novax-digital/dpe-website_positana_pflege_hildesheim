@@ -2,13 +2,17 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PublicPage from "@/components/PublicPage";
 import { getPublishedBlogPosts } from "@/lib/supabase.server";
+import { absoluteUrl, blogCollectionJsonLd } from "@/lib/seo";
 
 const articles = await getPublishedBlogPosts();
+const canonicalUrl = absoluteUrl("/ratgeber");
 ---
 
 <BaseLayout
-  title="Ratgeber"
+  title="Pflege-Ratgeber Hildesheim"
   description="Tipps und Wissen rund um Pflege, Entlastung und Alltag im Alter. Der Ratgeber von Positana Pflege Hildesheim."
+  schemaType="CollectionPage"
+  jsonLd={blogCollectionJsonLd(articles, canonicalUrl)}
 >
   <PublicPage page="Ratgeber" currentPath={Astro.url.pathname} articles={articles} client:load />
 </BaseLayout>

@@ -7,6 +7,7 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Image as ImageIcon,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -14,7 +15,9 @@ import {
   Phone,
   Plus,
   Trash2,
+  Upload,
   Users,
+  X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -84,6 +87,28 @@ const slugify = (text: string) =>
     .replace(/ß/g, "ss")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+
+const BLOG_IMAGE_BUCKET = "blog-images";
+const MAX_BLOG_IMAGE_SIZE = 5 * 1024 * 1024;
+const ALLOWED_BLOG_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+const ALLOWED_BLOG_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
+
+const hasAllowedBlogImageExtension = (filename: string) => {
+  const lowerName = filename.toLowerCase();
+  return ALLOWED_BLOG_IMAGE_EXTENSIONS.some((extension) => lowerName.endsWith(extension));
+};
+
+const estimateReadingTime = (markdown: string) => {
+  const text = markdown
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/\[[^\]]+\]\([^)]+\)/g, " ")
+    .replace(/[#>*_\-[\]().,;:!?/\\|]+/g, " ")
+    .trim();
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  return Math.max(1, Math.ceil(words / 220));
+};
 
 const statusLabel = {
   neu: "Neu",
@@ -189,7 +214,7 @@ const checkAdmin = async (userId: string) => {
 
 export const AdminLogin = () => {
   const { user, loading } = useAuth();
-  const [email, setEmail] = useState("p.polley@deutsche-pflegeentwicklung.de");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
@@ -214,7 +239,7 @@ export const AdminLogin = () => {
     }
 
     setSubmitting(true);
-    const { data, error } = await supabaseBrowser.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabaseBrowser.auth.signInWithPassword({ email: email.trim(), password });
 
     if (error || !data.user) {
       setSubmitting(false);
@@ -236,7 +261,7 @@ export const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-background px-4 flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5" autoComplete="off">
         <div className="text-center">
           <h1 className="font-serif text-3xl mb-2">Admin-Login</h1>
           <p className="text-sm text-muted-foreground">Positana Pflege Hildesheim</p>
@@ -244,11 +269,25 @@ export const AdminLogin = () => {
         <Message notice={notice} />
         <div className="space-y-2">
           <Label htmlFor="email">E-Mail</Label>
-          <Input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="off"
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Passwort</Label>
-          <Input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            autoComplete="new-password"
+            required
+          />
         </div>
         <Button type="submit" className="w-full" disabled={submitting}>
           {submitting ? "Wird angemeldet..." : "Anmelden"}
@@ -491,8 +530,10 @@ const BlogList = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-20">Bild</TableHead>
               <TableHead>Titel</TableHead>
               <TableHead>Kategorie</TableHead>
+              <TableHead>Autor</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Datum</TableHead>
               <TableHead className="w-28">Aktionen</TableHead>
@@ -501,8 +542,23 @@ const BlogList = () => {
           <TableBody>
             {posts.map((post) => (
               <TableRow key={post.id}>
+                <TableCell>
+                  {post.cover_image_url ? (
+                    <img
+                      src={post.cover_image_url}
+                      alt={post.cover_image_alt || post.title}
+                      className="h-10 w-14 rounded-md object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="h-10 w-14 rounded-md bg-muted flex items-center justify-center">
+                      <ImageIcon className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell className="font-medium">{post.title}</TableCell>
                 <TableCell>{post.category}</TableCell>
+                <TableCell>{post.author_name}</TableCell>
                 <TableCell>
                   <Badge variant={post.published ? "default" : "secondary"}>
                     {post.published ? "Veröffentlicht" : "Entwurf"}
@@ -534,14 +590,18 @@ const BlogEditor = ({ id }: { id: string }) => {
   const isNew = id === "neu";
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
   const [slugManual, setSlugManual] = useState(false);
   const [form, setForm] = useState({
     title: "",
     slug: "",
+    author_name: "Positana Pflege Team",
     excerpt: "",
     content: "",
     category: "Alltag im Alter",
+    cover_image_url: "",
+    cover_image_alt: "",
     published: false,
     published_at: dateInputValue(),
   });
@@ -561,9 +621,12 @@ const BlogEditor = ({ id }: { id: string }) => {
       setForm({
         title: data.title,
         slug: data.slug,
+        author_name: data.author_name ?? "Positana Pflege Team",
         excerpt: data.excerpt ?? "",
         content: data.content ?? "",
         category: data.category,
+        cover_image_url: data.cover_image_url ?? "",
+        cover_image_alt: data.cover_image_alt ?? "",
         published: data.published,
         published_at: dateInputValue(data.published_at),
       });
@@ -590,6 +653,10 @@ const BlogEditor = ({ id }: { id: string }) => {
       excerpt: form.excerpt.trim() || null,
       content: form.content,
       category: form.category,
+      author_name: form.author_name.trim() || "Positana Pflege Team",
+      cover_image_url: form.cover_image_url.trim() || null,
+      cover_image_alt: form.cover_image_alt.trim() || (form.cover_image_url ? form.title.trim() : null),
+      reading_time_minutes: estimateReadingTime(form.content),
       published: form.published,
       published_at: new Date(`${form.published_at}T12:00:00`).toISOString(),
     };
@@ -605,6 +672,43 @@ const BlogEditor = ({ id }: { id: string }) => {
     } else {
       window.location.href = "/admin/blog";
     }
+  };
+
+  const uploadCoverImage = async (file: File) => {
+    if (!supabaseBrowser) return;
+    setNotice(null);
+
+    if (!ALLOWED_BLOG_IMAGE_TYPES.includes(file.type) && !hasAllowedBlogImageExtension(file.name)) {
+      setNotice({ type: "error", text: "Bitte laden Sie nur JPG-, PNG-, WebP- oder AVIF-Bilder hoch." });
+      return;
+    }
+
+    if (file.size > MAX_BLOG_IMAGE_SIZE) {
+      setNotice({ type: "error", text: "Das Bild ist zu groß. Bitte maximal 5 MB hochladen." });
+      return;
+    }
+
+    setUploadingImage(true);
+    const extension = file.name.toLowerCase().split(".").pop() || "jpg";
+    const path = `covers/${crypto.randomUUID()}.${extension}`;
+    const { error } = await supabaseBrowser.storage.from(BLOG_IMAGE_BUCKET).upload(path, file, {
+      cacheControl: "31536000",
+      contentType: file.type || undefined,
+      upsert: false,
+    });
+    setUploadingImage(false);
+
+    if (error) {
+      setNotice({ type: "error", text: "Bild konnte nicht hochgeladen werden. Bitte prüfen, ob der Bucket eingerichtet ist." });
+      return;
+    }
+
+    const { data } = supabaseBrowser.storage.from(BLOG_IMAGE_BUCKET).getPublicUrl(path);
+    setForm((current) => ({
+      ...current,
+      cover_image_url: data.publicUrl,
+      cover_image_alt: current.cover_image_alt || current.title || "Ratgeberbild Positana Pflege Hildesheim",
+    }));
   };
 
   if (loading) return <p className="text-muted-foreground">Laden...</p>;
@@ -636,6 +740,15 @@ const BlogEditor = ({ id }: { id: string }) => {
           />
         </div>
         <div className="space-y-2">
+          <Label htmlFor="author_name">Autor</Label>
+          <Input
+            id="author_name"
+            value={form.author_name}
+            onChange={(event) => setForm({ ...form, author_name: event.target.value })}
+            placeholder="z. B. Positana Pflege Team"
+          />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="category">Kategorie</Label>
           <select
             id="category"
@@ -648,6 +761,67 @@ const BlogEditor = ({ id }: { id: string }) => {
             ))}
           </select>
         </div>
+        <div className="space-y-3 rounded-lg border border-border p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <Label htmlFor="cover_image">Beitragsbild</Label>
+              <p className="text-xs text-muted-foreground mt-1">
+                Empfohlen: mindestens 1200 x 630 px, JPG/PNG/WebP/AVIF, max. 5 MB.
+              </p>
+            </div>
+            {form.cover_image_url && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setForm({ ...form, cover_image_url: "", cover_image_alt: "" })}
+              >
+                <X className="h-4 w-4 mr-2" />
+                Entfernen
+              </Button>
+            )}
+          </div>
+          {form.cover_image_url ? (
+            <img
+              src={form.cover_image_url}
+              alt={form.cover_image_alt || form.title || "Ratgeberbild"}
+              className="aspect-[16/9] w-full rounded-md object-cover border border-border"
+            />
+          ) : (
+            <div className="aspect-[16/9] w-full rounded-md border border-dashed border-border bg-muted/50 flex flex-col items-center justify-center text-muted-foreground">
+              <ImageIcon className="h-8 w-8 mb-2" />
+              <span className="text-sm">Noch kein Beitragsbild ausgewählt</span>
+            </div>
+          )}
+          <Input
+            id="cover_image"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/avif"
+            disabled={uploadingImage}
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) {
+                uploadCoverImage(file);
+              }
+              event.target.value = "";
+            }}
+          />
+          <div className="space-y-2">
+            <Label htmlFor="cover_image_alt">Alt-Text für das Bild</Label>
+            <Input
+              id="cover_image_alt"
+              value={form.cover_image_alt}
+              onChange={(event) => setForm({ ...form, cover_image_alt: event.target.value })}
+              placeholder="Beschreiben Sie, was auf dem Bild zu sehen ist."
+            />
+          </div>
+          {uploadingImage && (
+            <p className="text-sm text-muted-foreground flex items-center gap-2">
+              <Upload className="h-4 w-4" />
+              Bild wird hochgeladen...
+            </p>
+          )}
+        </div>
         <div className="space-y-2">
           <Label htmlFor="published_at">Veröffentlichungsdatum</Label>
           <Input id="published_at" type="date" value={form.published_at} onChange={(event) => setForm({ ...form, published_at: event.target.value })} />
@@ -659,13 +833,16 @@ const BlogEditor = ({ id }: { id: string }) => {
         <div className="space-y-2">
           <Label htmlFor="content">Inhalt (Markdown)</Label>
           <Textarea id="content" rows={16} value={form.content} onChange={(event) => setForm({ ...form, content: event.target.value })} />
+          <p className="text-xs text-muted-foreground">
+            Lesedauer: ca. {estimateReadingTime(form.content)} Min. Verwenden Sie ## und ### Überschriften, daraus entsteht automatisch das Inhaltsverzeichnis.
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <Switch checked={form.published} onCheckedChange={(published) => setForm({ ...form, published })} />
           <span className="text-sm">Veröffentlicht</span>
         </div>
         <div className="flex gap-3 pt-2">
-          <Button onClick={save} disabled={saving || !form.title.trim() || !form.slug.trim()}>
+          <Button onClick={save} disabled={saving || uploadingImage || !form.title.trim() || !form.slug.trim()}>
             {saving ? "Speichern..." : "Speichern"}
           </Button>
           <Button variant="outline" asChild>

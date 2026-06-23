@@ -2,11 +2,13 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PublicPage from "@/components/PublicPage";
 import { getBlogPostBySlug } from "@/lib/supabase.server";
+import { absoluteUrl, blogPostJsonLd } from "@/lib/seo";
 
 export const prerender = false;
 
 const slug = Astro.params.slug ?? "";
 const post = await getBlogPostBySlug(slug);
+const canonicalUrl = absoluteUrl(`/ratgeber/${slug}`);
 
 if (!post) {
   Astro.response.status = 404;
@@ -16,7 +18,16 @@ if (!post) {
 <BaseLayout
   title={post?.title || "Beitrag nicht gefunden"}
   description={post?.excerpt || post?.title || "Der angeforderte Ratgeber-Beitrag konnte nicht gefunden werden."}
+  canonical={canonicalUrl}
+  image={post?.cover_image_url ?? undefined}
+  imageAlt={post?.cover_image_alt || post?.title || "Ratgeberbild Positana Pflege Hildesheim"}
   type="article"
+  schemaType="WebPage"
+  authorName={post?.author_name || "Positana Pflege Team"}
+  publishedAt={post?.published_at}
+  updatedAt={post?.updated_at}
+  breadcrumbLabel={post?.title}
+  jsonLd={post ? blogPostJsonLd(post, canonicalUrl) : undefined}
   noindex={!post}
 >
   <PublicPage page="BlogPost" currentPath={Astro.url.pathname} post={post} client:load />

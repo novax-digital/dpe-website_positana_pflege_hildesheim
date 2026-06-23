@@ -1,0 +1,33 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicPage from "@/components/PublicPage";
+import { LANDING_PAGES, getLandingPageBySlug } from "@/lib/landing-pages";
+import { absoluteUrl, landingPageJsonLd } from "@/lib/seo";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANDING_PAGES.map((page) => ({
+    params: { slug: page.slug },
+  }));
+}
+
+const slug = Astro.params.slug ?? "";
+const landingPage = getLandingPageBySlug(slug);
+const canonicalUrl = absoluteUrl(`/pflege/${slug}`);
+
+if (!landingPage) {
+  Astro.response.status = 404;
+}
+---
+
+<BaseLayout
+  title={landingPage?.seoTitle || "Pflegeseite nicht gefunden"}
+  description={landingPage?.description || "Die angeforderte Pflegeseite konnte nicht gefunden werden."}
+  canonical={canonicalUrl}
+  breadcrumbLabel={landingPage?.breadcrumbLabel}
+  jsonLd={landingPage ? landingPageJsonLd(landingPage, canonicalUrl) : undefined}
+  noindex={!landingPage}
+>
+  <PublicPage page="SeoLandingPage" currentPath={Astro.url.pathname} landingPage={landingPage} client:load />
+</BaseLayout>

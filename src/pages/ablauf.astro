@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PublicPage from "@/components/PublicPage";
+import { absoluteUrl, careProcessJsonLd } from "@/lib/seo";
+
+const canonicalUrl = absoluteUrl("/ablauf");
 ---
 
 <BaseLayout
-  title="So läuft es ab"
-  description="In drei einfachen Schritten zu Ihrer persönlichen Pflege und Betreuung in Hildesheim: kostenlose Beratung, individuelles Angebot, Start der Versorgung."
+  title="Pflegeberatung & Ablauf in Hildesheim"
+  description="In drei einfachen Schritten zur persönlichen Pflege und Betreuung in Hildesheim: kostenlose Beratung, individuelles Angebot und Start der Versorgung."
+  jsonLd={careProcessJsonLd(canonicalUrl)}
 >
   <PublicPage page="Ablauf" currentPath={Astro.url.pathname} client:load />
 </BaseLayout>

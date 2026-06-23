@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* About */}
           <div>
             <img src={logo.src} width={1109} height={383} alt="Positana" className="h-10 w-auto mb-4 brightness-0 invert" loading="lazy" decoding="async" />
@@ -65,6 +65,30 @@ const Footer = () => {
                 <Clock className="w-4 h-4 mt-1 shrink-0" />
                 <span>Mo–Fr: 8:00–14:00 Uhr</span>
               </li>
+            </ul>
+          </div>
+
+          {/* Local SEO */}
+          <div>
+            <h4 className="font-serif text-lg mb-4">Pflege vor Ort</h4>
+            <ul className="space-y-2">
+              {[
+                { label: "Pflege Hildesheim", path: "/pflege/ambulante-pflege-hildesheim" },
+                { label: "Pflege Giesen", path: "/pflege/ambulante-pflege-giesen" },
+                { label: "Pflege Sarstedt", path: "/pflege/ambulante-pflege-sarstedt" },
+                { label: "Grundpflege", path: "/pflege/grundpflege-hildesheim" },
+                { label: "Behandlungspflege", path: "/pflege/behandlungspflege-hildesheim" },
+                { label: "Pflegegrad-Beratung", path: "/pflege/pflegeberatung-pflegegrad-hildesheim" },
+              ].map((link) => (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

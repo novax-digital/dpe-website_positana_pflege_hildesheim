@@ -7,6 +7,7 @@ Das Backend orientiert sich an der Lovable-Codebase und nutzt dieselben Kernobje
 - `contact_messages` für Kontaktanfragen
 - `job_applications` für Bewerbungen
 - privater Storage-Bucket `resumes` für Bewerbungsdateien
+- öffentlicher Storage-Bucket `blog-images` für Ratgeber-Beitragsbilder
 
 ## Environment
 
@@ -41,6 +42,12 @@ npm run supabase:setup
 
 Das Script führt alle SQL-Dateien aus `supabase/migrations` aus, prüft Tabellen und Bucket und legt danach den Admin-User an oder aktualisiert ihn.
 
+Wenn nur Migrationen/Buckets geprüft werden sollen und der Admin-User unverändert bleiben soll:
+
+```bash
+SKIP_ADMIN_UPSERT=true npm run supabase:setup
+```
+
 ## Datenmodell
 
 Die SQL-Dateien liegen unter `supabase/migrations`. Sie stammen aus der Lovable-Basis, wurden aber für diese Astro-Version an zwei Stellen angepasst:
@@ -68,3 +75,7 @@ Bewerbungsdateien laufen Vercel-tauglich:
 3. Die Astro-API speichert danach nur die Storage-Pfade in `job_applications.resume_url`.
 
 Damit umgehen wir das Vercel Function Body Limit für größere Uploads.
+
+## Ratgeberbilder
+
+Der Adminbereich lädt Beitragsbilder direkt in den öffentlichen Supabase-Storage-Bucket `blog-images` hoch. In `blog_posts` werden danach die öffentliche Bild-URL, der Alt-Text, der Autor und die geschätzte Lesedauer gespeichert. Die öffentliche Ratgeberseite nutzt diese Felder für Karten, Artikel-Hero, OpenGraph und `BlogPosting`-JSON-LD.

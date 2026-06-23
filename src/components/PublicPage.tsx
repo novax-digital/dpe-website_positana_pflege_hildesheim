@@ -13,6 +13,8 @@ import Kontakt from "@/react-pages/Kontakt";
 import Karriere from "@/react-pages/Karriere";
 import Impressum from "@/react-pages/Impressum";
 import Datenschutz from "@/react-pages/Datenschutz";
+import SeoLandingPage from "@/react-pages/SeoLandingPage";
+import type { LandingPage } from "@/lib/landing-pages";
 import type { BlogPost as BlogPostEntry, JobListing } from "@/lib/supabase-schema";
 
 const pages = {
@@ -28,6 +30,7 @@ const pages = {
   Karriere,
   Impressum,
   Datenschutz,
+  SeoLandingPage,
 };
 
 type PageKey = keyof typeof pages;
@@ -38,13 +41,15 @@ interface PublicPageProps {
   articles?: BlogPostEntry[];
   jobs?: JobListing[];
   post?: BlogPostEntry | null;
+  landingPage?: LandingPage | null;
 }
 
-const PublicPage = ({ page, currentPath = "/", articles = [], jobs = [], post = null }: PublicPageProps) => {
+const PublicPage = ({ page, currentPath = "/", articles = [], jobs = [], post = null, landingPage = null }: PublicPageProps) => {
   const Page = pages[page] as React.ComponentType<{
     articles?: BlogPostEntry[];
     jobs?: JobListing[];
     post?: BlogPostEntry | null;
+    landingPage?: LandingPage | null;
   }>;
 
   return (
@@ -52,7 +57,7 @@ const PublicPage = ({ page, currentPath = "/", articles = [], jobs = [], post = 
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">
-          <Page articles={articles} jobs={jobs} post={post} />
+          <Page articles={articles} jobs={jobs} post={post} landingPage={landingPage} />
         </main>
         <Footer />
       </div>

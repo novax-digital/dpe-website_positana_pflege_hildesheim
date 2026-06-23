@@ -1,132 +1,148 @@
 ---
 import "@/styles/global.css";
+import {
+  GEO,
+  ROUTE_LABELS,
+  SITE_LANGUAGE,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_SHORT_NAME,
+  SITE_URL,
+  absoluteUrl,
+  normalizePath,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 
 interface Props {
   title: string;
   description: string;
   canonical?: string;
+  image?: string;
+  imageAlt?: string;
   type?: string;
+  schemaType?: string;
+  authorName?: string;
   noindex?: boolean;
+  publishedAt?: string;
+  updatedAt?: string;
+  breadcrumbLabel?: string;
   jsonLd?: unknown | unknown[];
 }
 
-const SITE_NAME = "Positana Pflege Hildesheim";
-const SITE_URL = "https://positana-pflege-hildesheim.de";
-const { title, description, canonical, type = "website", noindex = false, jsonLd } = Astro.props;
+const {
+  title,
+  description,
+  canonical,
+  image,
+  imageAlt = "Positana Pflege Hildesheim - fürsorgliche Begleitung im Alltag",
+  type = "website",
+  schemaType = "WebPage",
+  authorName = SITE_SHORT_NAME,
+  noindex = false,
+  publishedAt,
+  updatedAt,
+  breadcrumbLabel,
+  jsonLd,
+} = Astro.props;
 const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
-const canonicalPath = Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
-const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_URL).toString();
-const socialImageUrl = new URL("/og-image.jpg", SITE_URL).toString();
-const routeLabels: Record<string, string> = {
-  "leistungen": "Leistungen",
-  "ueber-uns": "Über uns",
-  "ablauf": "Ablauf",
-  "abrechnung": "Abrechnung",
-  "faq": "FAQ",
-  "ratgeber": "Ratgeber",
-  "kontakt": "Kontakt",
-  "karriere": "Karriere",
-  "impressum": "Impressum",
-  "datenschutz": "Datenschutz",
-};
+const canonicalPath = normalizePath(Astro.url.pathname);
+const canonicalUrl = absoluteUrl(canonical ?? canonicalPath);
+const socialImageUrl = absoluteUrl(image ?? "/og-image.jpg");
 const pathSegments = Astro.url.pathname.split("/").filter(Boolean);
 const breadcrumbJsonLd =
   pathSegments.length > 0
     ? {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
+        "@id": `${canonicalUrl}#breadcrumb`,
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
             name: "Startseite",
-            item: new URL("/", SITE_URL).toString(),
+            item: absoluteUrl("/"),
           },
           ...pathSegments.map((segment, index) => {
             const route = `/${pathSegments.slice(0, index + 1).join("/")}`;
+            const isLast = index === pathSegments.length - 1;
             return {
               "@type": "ListItem",
               position: index + 2,
-              name: routeLabels[segment] ?? segment,
-              item: new URL(route, SITE_URL).toString(),
+              name: isLast && breadcrumbLabel ? breadcrumbLabel : ROUTE_LABELS[segment] ?? segment,
+              item: absoluteUrl(route),
             };
           }),
         ],
       }
     : null;
-const jsonLdItems = [
-  {
-    "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
+const webPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": schemaType,
+  "@id": `${canonicalUrl}#webpage`,
+  url: canonicalUrl,
+  name: fullTitle,
+  headline: title,
+  description,
+  inLanguage: SITE_LANGUAGE,
+  isPartOf: {
+    "@id": `${SITE_URL}/#website`,
+  },
+  about: {
     "@id": `${SITE_URL}/#organization`,
-    name: "Positana Pflege Hildesheim",
-    description:
-      "Ambulanter Pflegedienst in Hildesheim: Grund- und Behandlungspflege, Verhinderungspflege, Betreutes Wohnen in der Theaterresidenz sowie Alltagsbegleitung. Seit 1993.",
-    url: SITE_URL,
-    logo: new URL("/favicon.svg", SITE_URL).toString(),
-    image: socialImageUrl,
-    telephone: "+4917619312010",
-    email: "info@positana-pflege.de",
-    priceRange: "$$",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Brückenstr. 3",
-      postalCode: "31180",
-      addressLocality: "Giesen",
-      addressRegion: "Niedersachsen",
-      addressCountry: "DE",
-    },
-    areaServed: {
-      "@type": "City",
-      name: "Hildesheim",
-    },
-    foundingDate: "1993",
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:00",
-        closes: "14:00",
-      },
-    ],
-    medicalSpecialty: "Geriatric",
-    serviceType: [
-      "Ambulante Pflege",
-      "Grundpflege",
-      "Behandlungspflege",
-      "Verhinderungspflege",
-      "Betreutes Wohnen",
-      "Alltagsbegleitung",
-      "Seniorenbetreuung",
-    ],
   },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: SITE_NAME,
-    url: SITE_URL,
-    inLanguage: "de-DE",
-    publisher: {
-      "@id": `${SITE_URL}/#organization`,
-    },
+  provider: {
+    "@id": `${SITE_URL}/#organization`,
   },
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    url: socialImageUrl,
+    caption: imageAlt,
+  },
+  ...(breadcrumbJsonLd
+    ? {
+        breadcrumb: {
+          "@id": `${canonicalUrl}#breadcrumb`,
+        },
+      }
+    : {}),
+  ...(publishedAt ? { datePublished: publishedAt } : {}),
+  ...(updatedAt ? { dateModified: updatedAt } : {}),
+};
+const jsonLdItems = [
+  organizationJsonLd(socialImageUrl),
+  websiteJsonLd,
+  webPageJsonLd,
   ...(breadcrumbJsonLd ? [breadcrumbJsonLd] : []),
   ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
 ];
+const serializeJsonLd = (item: unknown) => JSON.stringify(item).replace(/</g, "\\u003c");
+const robotsContent = noindex ? "noindex, nofollow" : "index, follow";
+const googlebotContent = noindex
+  ? "noindex, nofollow"
+  : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1";
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={SITE_LANGUAGE}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#00667a" />
     <meta name="format-detection" content="telephone=yes" />
+    <meta name="language" content={SITE_LANGUAGE} />
+    <meta name="geo.region" content={GEO.region} />
+    <meta name="geo.placename" content={GEO.placename} />
+    <meta name="geo.position" content={GEO.position} />
+    <meta name="ICBM" content={GEO.position.replace(";", ", ")} />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="author" content="Positana Pflege" />
-    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <meta name="author" content={authorName} />
+    <meta name="robots" content={robotsContent} />
+    <meta name="googlebot" content={googlebotContent} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" href={canonicalUrl} hreflang="de-DE" />
+    <link rel="alternate" href={canonicalUrl} hreflang="x-default" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -138,16 +154,21 @@ const jsonLdItems = [
     <meta property="og:image" content={socialImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="800" />
-    <meta property="og:image:alt" content="Positana Pflege Hildesheim - fürsorgliche Begleitung im Alltag" />
-    <meta property="og:locale" content="de_DE" />
-    <meta property="og:site_name" content="Positana Pflege" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:locale" content={SITE_LOCALE} />
+    <meta property="og:site_name" content={SITE_SHORT_NAME} />
+    {updatedAt && <meta property="og:updated_time" content={updatedAt} />}
+    {type === "article" && authorName && <meta property="article:author" content={authorName} />}
+    {type === "article" && publishedAt && <meta property="article:published_time" content={publishedAt} />}
+    {type === "article" && updatedAt && <meta property="article:modified_time" content={updatedAt} />}
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
-    {jsonLdItems.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />)}
+    {jsonLdItems.map((item) => <script is:inline type="application/ld+json" set:html={serializeJsonLd(item)} />)}
   </head>
   <body>
     <slot />

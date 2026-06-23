@@ -40,12 +40,13 @@ const env = {
   ...process.env,
 };
 
+const skipAdminUpsert = env.SKIP_ADMIN_UPSERT === "true";
+
 const required = [
   "PUBLIC_SUPABASE_URL",
   "SUPABASE_SERVICE_ROLE_KEY",
   "SUPABASE_DB_URL",
-  "ADMIN_EMAIL",
-  "ADMIN_PASSWORD",
+  ...(skipAdminUpsert ? [] : ["ADMIN_EMAIL", "ADMIN_PASSWORD"]),
 ];
 
 const missing = required.filter((key) => !env[key]);
@@ -195,23 +196,28 @@ const verifySetup = async () => {
     throw new Error(`Missing tables after setup: ${missingTables.join(", ")}`);
   }
 
-  const bucketName = env.SUPABASE_RESUME_BUCKET || "resumes";
-  const [bucket] = await db`
+  const requiredBuckets = [env.SUPABASE_RESUME_BUCKET || "resumes", "blog-images"];
+  const buckets = await db`
     SELECT id
     FROM storage.buckets
-    WHERE id = ${bucketName}
-    LIMIT 1
+    WHERE id = ANY(${requiredBuckets})
   `;
+  const foundBuckets = new Set(buckets.map((row) => row.id));
+  const missingBuckets = requiredBuckets.filter((bucketName) => !foundBuckets.has(bucketName));
 
-  if (!bucket) {
-    throw new Error(`Missing storage bucket after setup: ${bucketName}`);
+  if (missingBuckets.length > 0) {
+    throw new Error(`Missing storage buckets after setup: ${missingBuckets.join(", ")}`);
   }
 };
 
 try {
   await runMigrations();
   await verifySetup();
-  await upsertAdmin();
+  if (skipAdminUpsert) {
+    console.log("Skipping admin user upsert.");
+  } else {
+    await upsertAdmin();
+  }
   console.log("Supabase setup complete.");
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);

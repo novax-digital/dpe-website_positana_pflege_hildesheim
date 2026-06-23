@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PublicPage from "@/components/PublicPage";
+import { absoluteUrl, serviceCatalogJsonLd } from "@/lib/seo";
+
+const canonicalUrl = absoluteUrl("/leistungen");
 ---
 
 <BaseLayout
-  title="Leistungen"
-  description="Grundpflege, Behandlungspflege, Haushaltshilfe und Verhinderungspflege in Hildesheim. Positana Pflege betreut Sie zuverlässig und einfühlsam."
+  title="Pflegeleistungen in Hildesheim"
+  description="Grundpflege, Behandlungspflege, Haushaltshilfe, Verhinderungspflege und Betreutes Wohnen in Hildesheim. Positana Pflege betreut Sie zuverlässig und einfühlsam."
+  jsonLd={serviceCatalogJsonLd(canonicalUrl)}
 >
   <PublicPage page="Leistungen" currentPath={Astro.url.pathname} client:load />
 </BaseLayout>

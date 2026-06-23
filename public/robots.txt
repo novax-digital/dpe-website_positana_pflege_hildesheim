@@ -2,4 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
+# LLM context: https://positana-pflege-hildesheim.de/llms.txt
 Sitemap: https://positana-pflege-hildesheim.de/sitemap.xml
