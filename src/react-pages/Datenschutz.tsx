@@ -187,23 +187,16 @@ const Datenschutz = () => (
             </p>
           </Section>
 
-          <Section title="9. Google Fonts">
+          <Section title="9. Lokale Schriftarten">
             <p>
-              Zur einheitlichen Darstellung der Schriften nutzt diese Website Google Fonts. Anbieter ist
-              Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Beim Abruf der Schriften
-              wird eine Verbindung zu Servern von Google hergestellt. Dabei können insbesondere IP-Adresse,
-              Browserinformationen und die aufgerufene Seite verarbeitet werden.
+              Zur einheitlichen Darstellung der Website nutzen wir die Schriftarten DM Sans und Lora. Die
+              Schriftdateien werden lokal auf unserem Webserver bereitgestellt und zusammen mit der Website
+              ausgeliefert.
             </p>
             <p>
-              Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in einer
-              performanten und einheitlichen Darstellung der Website. Eine Verarbeitung durch Google LLC in
-              den USA kann nicht ausgeschlossen werden.
-            </p>
-            <p>
-              Weitere Informationen finden Sie in der Datenschutzerklärung von Google:{" "}
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline break-all">
-                https://policies.google.com/privacy
-              </a>
+              Beim Laden der Schriftarten wird keine Verbindung zu Google Fonts, Google-Servern oder anderen
+              externen Schriftanbieter-Servern hergestellt. Eine gesonderte Übermittlung personenbezogener
+              Daten an Google findet durch die Schriftanzeige daher nicht statt.
             </p>
           </Section>
 
