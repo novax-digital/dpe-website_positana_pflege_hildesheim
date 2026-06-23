@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PublicPage from "@/components/PublicPage";
+import FaqPublicPage from "@/components/public-pages/FaqPublicPage";
 
 const faqs = [
   {
@@ -57,5 +57,5 @@ const faqJsonLd = {
   description="Antworten auf häufige Fragen zu Pflege, Pflegegrad, Behandlungspflege, Betreutes Wohnen und Abrechnung in Hildesheim. Positana Pflege klärt auf."
   jsonLd={faqJsonLd}
 >
-  <PublicPage page="FAQ" currentPath={Astro.url.pathname} client:idle />
+  <FaqPublicPage currentPath={Astro.url.pathname} client:idle />
 </BaseLayout>

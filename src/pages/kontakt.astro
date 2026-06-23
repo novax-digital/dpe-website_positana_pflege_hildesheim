@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PublicPage from "@/components/PublicPage";
+import KontaktPublicPage from "@/components/public-pages/KontaktPublicPage";
 ---
 
 <BaseLayout
@@ -9,5 +9,5 @@ import PublicPage from "@/components/PublicPage";
   description="Kontaktieren Sie Positana Pflege in Hildesheim. Kostenlose Beratung unter 0176 19312010 oder per Kontaktformular."
   schemaType="ContactPage"
 >
-  <PublicPage page="Kontakt" currentPath={Astro.url.pathname} client:idle />
+  <KontaktPublicPage currentPath={Astro.url.pathname} client:idle />
 </BaseLayout>

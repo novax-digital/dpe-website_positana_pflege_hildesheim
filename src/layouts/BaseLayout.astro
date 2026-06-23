@@ -170,5 +170,62 @@ const googlebotContent = noindex
   </head>
   <body>
     <slot />
+    <script is:inline>
+      (() => {
+        const prefetched = new Set();
+
+        const getPrefetchUrl = (anchor) => {
+          const href = anchor?.getAttribute("href");
+          if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) {
+            return null;
+          }
+
+          if (anchor.target === "_blank" || anchor.dataset.prefetch === "false") {
+            return null;
+          }
+
+          const url = new URL(href, window.location.href);
+          if (url.origin !== window.location.origin) {
+            return null;
+          }
+
+          if (url.pathname.startsWith("/admin") || url.pathname.startsWith("/api")) {
+            return null;
+          }
+
+          url.hash = "";
+          return url.href;
+        };
+
+        const prefetch = (anchor) => {
+          const href = getPrefetchUrl(anchor);
+          if (!href || prefetched.has(href)) {
+            return;
+          }
+
+          prefetched.add(href);
+          const link = document.createElement("link");
+          link.rel = "prefetch";
+          link.as = "document";
+          link.href = href;
+          document.head.appendChild(link);
+        };
+
+        const handleLinkIntent = (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) {
+            return;
+          }
+
+          const anchor = target.closest("a[href]");
+          if (anchor) {
+            prefetch(anchor);
+          }
+        };
+
+        document.addEventListener("pointerover", handleLinkIntent, { passive: true });
+        document.addEventListener("focusin", handleLinkIntent);
+      })();
+    </script>
   </body>
 </html>

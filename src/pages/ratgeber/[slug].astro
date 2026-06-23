@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PublicPage from "@/components/PublicPage";
+import BlogPostPublicPage from "@/components/public-pages/BlogPostPublicPage";
 import { getBlogPostBySlug } from "@/lib/supabase.server";
 import { absoluteUrl, blogPostJsonLd } from "@/lib/seo";
 
@@ -13,7 +13,7 @@ const canonicalUrl = absoluteUrl(`/ratgeber/${slug}`);
 if (!post) {
   Astro.response.status = 404;
 } else {
-  Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
+  Astro.response.headers.set("Cache-Control", "public, s-maxage=900, stale-while-revalidate=86400");
 }
 ---
 
@@ -32,5 +32,5 @@ if (!post) {
   jsonLd={post ? blogPostJsonLd(post, canonicalUrl) : undefined}
   noindex={!post}
 >
-  <PublicPage page="BlogPost" currentPath={Astro.url.pathname} post={post} client:idle />
+  <BlogPostPublicPage currentPath={Astro.url.pathname} post={post} client:idle />
 </BaseLayout>

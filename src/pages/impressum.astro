@@ -1,9 +1,9 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PublicPage from "@/components/PublicPage";
+import ImpressumPublicPage from "@/components/public-pages/ImpressumPublicPage";
 ---
 
 <BaseLayout title="Impressum" description="Impressum von Positana Pflege Hildesheim." noindex>
-  <PublicPage page="Impressum" currentPath={Astro.url.pathname} client:idle />
+  <ImpressumPublicPage currentPath={Astro.url.pathname} client:idle />
 </BaseLayout>
