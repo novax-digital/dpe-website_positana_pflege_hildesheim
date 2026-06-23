@@ -103,13 +103,29 @@
 
 @layer utilities {
   .fade-in-section {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    opacity: 1;
+    transform: none;
   }
 
-  .fade-in-section.is-visible {
+  .scroll-animations-ready .fade-in-section {
+    transition: opacity 560ms ease-out, transform 560ms ease-out;
+  }
+
+  .scroll-animations-ready .fade-in-section:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  .scroll-animations-ready .fade-in-section.is-visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-animations-ready .fade-in-section {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 }
