@@ -97,6 +97,26 @@ export const getPublishedJobListings = async () => {
   return data ?? [];
 };
 
+export const getJobListingById = async (id: string) => {
+  const supabase = getReadClient();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("job_listings")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    logSupabaseError("job_listings:single", error);
+    return null;
+  }
+
+  return data;
+};
+
 export const createContactMessage = async (message: ContactMessageInsert) => {
   const supabase = createSupabaseServerClient();
   if (!supabase) {
@@ -154,4 +174,24 @@ export const createJobApplication = async (application: JobApplicationInsert) =>
   }
 
   return data;
+};
+
+export const createResumeDownloadUrls = async (paths: string[], expiresIn = 7 * 24 * 60 * 60) => {
+  const supabase = createSupabaseServerClient();
+  if (!supabase || paths.length === 0) {
+    return [] as Array<{ path: string; signedUrl: string }>;
+  }
+
+  const urls: Array<{ path: string; signedUrl: string }> = [];
+
+  for (const path of paths) {
+    const { data, error } = await supabase.storage.from(resumeBucket).createSignedUrl(path, expiresIn);
+    if (error || !data?.signedUrl) {
+      logSupabaseError("resumes:signed-url", error ?? `No signed URL for ${path}`);
+    } else {
+      urls.push({ path, signedUrl: data.signedUrl });
+    }
+  }
+
+  return urls;
 };

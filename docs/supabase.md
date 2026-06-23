@@ -16,6 +16,9 @@ PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 SUPABASE_DB_URL=postgres://postgres.PROJECT_REF:PASSWORT@REGION.pooler.supabase.com:5432/postgres
 SUPABASE_RESUME_BUCKET=resumes
+RESEND_API_KEY=...
+RESEND_FROM_EMAIL=Positana Pflege <kontakt@positana-pflege-hildesheim.de>
+RESEND_NOTIFICATION_EMAIL=info@positana-pflege.de
 ADMIN_EMAIL=p.polley@deutsche-pflegeentwicklung.de
 ADMIN_PASSWORD=...
 ```
@@ -23,6 +26,8 @@ ADMIN_PASSWORD=...
 `SUPABASE_SERVICE_ROLE_KEY` ist server-only und darf nicht in Client-Code landen. Auf Vercel gehört er in die Environment Variables des Projekts.
 
 `SUPABASE_DB_URL` wird nur für das initiale Setup gebraucht. Du findest sie im Supabase Dashboard unter **Connect** als Session-Pooler-Connection-String. Dafür wird das Datenbankpasswort benötigt, nicht das Admin-Login-Passwort der Website.
+
+Für E-Mail-Benachrichtigungen wird Resend genutzt. `RESEND_API_KEY`, `RESEND_FROM_EMAIL` und `RESEND_NOTIFICATION_EMAIL` müssen in Vercel als Environment Variables gesetzt werden. Der Absender sollte eine in Resend verifizierte Domain verwenden. Wenn Resend nicht konfiguriert ist oder der Versand fehlschlägt, werden Kontaktanfragen und Bewerbungen trotzdem in Supabase gespeichert.
 
 ## Setup Ausführen
 
@@ -51,6 +56,8 @@ Die SQL-Dateien liegen unter `supabase/migrations`. Sie stammen aus der Lovable-
 - `/api/contact` erstellt `contact_messages`.
 - `/api/applications/upload-url` erstellt signierte Upload-Ziele für Dateien im Bucket `resumes`.
 - `/api/applications` erstellt `job_applications` und speichert die Upload-Pfade im alten Lovable-Feld `resume_url`.
+
+Nach erfolgreichem Speichern sendet `/api/contact` eine Benachrichtigung an `RESEND_NOTIFICATION_EMAIL`. `/api/applications` sendet ebenfalls eine Benachrichtigung und erzeugt für Bewerbungsdateien zeitlich begrenzte Downloadlinks.
 
 ## Bewerbungsdateien
 

@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
-import { createJobApplication } from "@/lib/supabase.server";
+import { sendApplicationNotification } from "@/lib/email.server";
+import { createJobApplication, createResumeDownloadUrls, getJobListingById } from "@/lib/supabase.server";
 
 export const prerender = false;
 
@@ -91,6 +92,28 @@ export const POST: APIRoute = async ({ request }) => {
       cover_text: coverText || null,
       resume_url: resumePaths.length ? resumePaths.join(",") : null,
     });
+
+    try {
+      const [jobListing, resumeLinks] = await Promise.all([
+        jobListingId ? getJobListingById(jobListingId) : Promise.resolve(null),
+        createResumeDownloadUrls(resumePaths),
+      ]);
+
+      await sendApplicationNotification({
+        name,
+        phone,
+        email,
+        coverText: coverText || null,
+        jobTitle: jobListing?.title ?? null,
+        resumeLinks,
+        adminUrl: new URL("/admin/applications", request.url).toString(),
+      });
+    } catch (notificationError) {
+      console.warn(
+        "[resend:application]",
+        notificationError instanceof Error ? notificationError.message : notificationError,
+      );
+    }
 
     return json({ ok: true });
   } catch (error) {

@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { sendContactNotification } from "@/lib/email.server";
 import { createContactMessage } from "@/lib/supabase.server";
 
 export const prerender = false;
@@ -56,6 +57,21 @@ export const POST: APIRoute = async ({ request }) => {
       phone: phone || null,
       message,
     });
+
+    try {
+      await sendContactNotification({
+        name,
+        email,
+        phone: phone || null,
+        message,
+        adminUrl: new URL("/admin/messages", request.url).toString(),
+      });
+    } catch (notificationError) {
+      console.warn(
+        "[resend:contact]",
+        notificationError instanceof Error ? notificationError.message : notificationError,
+      );
+    }
 
     return json({ ok: true });
   } catch (error) {
