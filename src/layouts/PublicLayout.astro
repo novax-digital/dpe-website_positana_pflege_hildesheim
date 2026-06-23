@@ -1,0 +1,18 @@
+---
+import SiteHeader from "@/components/SiteHeader.astro";
+import Footer from "@/components/Footer";
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+---
+
+<div class="flex min-h-screen flex-col">
+  <SiteHeader currentPath={currentPath} />
+  <main class="flex-1">
+    <slot />
+  </main>
+  <Footer />
+</div>

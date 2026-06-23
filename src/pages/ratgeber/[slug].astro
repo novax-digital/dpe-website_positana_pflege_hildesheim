@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import BlogPostPublicPage from "@/components/public-pages/BlogPostPublicPage";
+import PublicLayout from "@/layouts/PublicLayout.astro";
+import BlogPost from "@/react-pages/BlogPost";
 import { getBlogPostBySlug } from "@/lib/supabase.server";
 import { absoluteUrl, blogPostJsonLd } from "@/lib/seo";
 
@@ -32,5 +33,7 @@ if (!post) {
   jsonLd={post ? blogPostJsonLd(post, canonicalUrl) : undefined}
   noindex={!post}
 >
-  <BlogPostPublicPage currentPath={Astro.url.pathname} post={post} client:idle />
+  <PublicLayout currentPath={Astro.url.pathname}>
+    <BlogPost post={post} />
+  </PublicLayout>
 </BaseLayout>

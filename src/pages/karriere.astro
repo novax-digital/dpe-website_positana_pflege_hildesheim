@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import KarrierePublicPage from "@/components/public-pages/KarrierePublicPage";
+import PublicLayout from "@/layouts/PublicLayout.astro";
+import Karriere from "@/react-pages/Karriere";
 import { getPublishedJobListings } from "@/lib/supabase.server";
 import { jobPostingJsonLd } from "@/lib/seo";
 
@@ -14,5 +15,7 @@ Astro.response.headers.set("Cache-Control", "public, s-maxage=900, stale-while-r
   description="Pflegejobs bei Positana Pflege Hildesheim. Bewerben Sie sich als Pflegefachkraft, Pflegehilfskraft oder Alltagsbegleiter:in - flexible Arbeitszeiten, faire Vergütung."
   jsonLd={jobJsonLd}
 >
-  <KarrierePublicPage currentPath={Astro.url.pathname} jobs={jobs} client:idle />
+  <PublicLayout currentPath={Astro.url.pathname}>
+    <Karriere jobs={jobs} client:idle />
+  </PublicLayout>
 </BaseLayout>

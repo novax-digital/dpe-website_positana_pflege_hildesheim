@@ -1,7 +1,8 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import AblaufPublicPage from "@/components/public-pages/AblaufPublicPage";
+import PublicLayout from "@/layouts/PublicLayout.astro";
+import Ablauf from "@/react-pages/Ablauf";
 import { absoluteUrl, careProcessJsonLd } from "@/lib/seo";
 
 const canonicalUrl = absoluteUrl("/ablauf");
@@ -12,5 +13,7 @@ const canonicalUrl = absoluteUrl("/ablauf");
   description="In drei einfachen Schritten zur persönlichen Pflege und Betreuung in Hildesheim: kostenlose Beratung, individuelles Angebot und Start der Versorgung."
   jsonLd={careProcessJsonLd(canonicalUrl)}
 >
-  <AblaufPublicPage currentPath={Astro.url.pathname} client:idle />
+  <PublicLayout currentPath={Astro.url.pathname}>
+    <Ablauf />
+  </PublicLayout>
 </BaseLayout>

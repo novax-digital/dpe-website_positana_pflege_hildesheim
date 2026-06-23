@@ -1,9 +1,12 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import DatenschutzPublicPage from "@/components/public-pages/DatenschutzPublicPage";
+import PublicLayout from "@/layouts/PublicLayout.astro";
+import Datenschutz from "@/react-pages/Datenschutz";
 ---
 
 <BaseLayout title="Datenschutz" description="Datenschutzerklärung der Positana Pflege Hildesheim gemäß DSGVO." noindex>
-  <DatenschutzPublicPage currentPath={Astro.url.pathname} client:idle />
+  <PublicLayout currentPath={Astro.url.pathname}>
+    <Datenschutz />
+  </PublicLayout>
 </BaseLayout>

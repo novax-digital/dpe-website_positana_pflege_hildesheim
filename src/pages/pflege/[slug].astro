@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import SeoLandingPublicPage from "@/components/public-pages/SeoLandingPublicPage";
+import PublicLayout from "@/layouts/PublicLayout.astro";
+import SeoLandingPage from "@/react-pages/SeoLandingPage";
 import { LANDING_PAGES, getLandingPageBySlug } from "@/lib/landing-pages";
 import { absoluteUrl, landingPageJsonLd } from "@/lib/seo";
 
@@ -29,5 +30,7 @@ if (!landingPage) {
   jsonLd={landingPage ? landingPageJsonLd(landingPage, canonicalUrl) : undefined}
   noindex={!landingPage}
 >
-  <SeoLandingPublicPage currentPath={Astro.url.pathname} landingPage={landingPage} client:idle />
+  <PublicLayout currentPath={Astro.url.pathname}>
+    <SeoLandingPage landingPage={landingPage} />
+  </PublicLayout>
 </BaseLayout>

@@ -1,7 +1,8 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import LeistungenPublicPage from "@/components/public-pages/LeistungenPublicPage";
+import PublicLayout from "@/layouts/PublicLayout.astro";
+import Leistungen from "@/react-pages/Leistungen";
 import { absoluteUrl, serviceCatalogJsonLd } from "@/lib/seo";
 
 const canonicalUrl = absoluteUrl("/leistungen");
@@ -12,5 +13,7 @@ const canonicalUrl = absoluteUrl("/leistungen");
   description="Grundpflege, Behandlungspflege, Haushaltshilfe, Verhinderungspflege und Betreutes Wohnen in Hildesheim. Positana Pflege betreut Sie zuverlässig und einfühlsam."
   jsonLd={serviceCatalogJsonLd(canonicalUrl)}
 >
-  <LeistungenPublicPage currentPath={Astro.url.pathname} client:idle />
+  <PublicLayout currentPath={Astro.url.pathname}>
+    <Leistungen />
+  </PublicLayout>
 </BaseLayout>

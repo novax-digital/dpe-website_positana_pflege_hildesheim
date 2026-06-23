@@ -1,0 +1,215 @@
+---
+import { Briefcase, ChevronDown, MapPin, Menu, Phone, X } from "lucide-react";
+import logo from "@/assets/logo.png";
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = "/" } = Astro.props;
+const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
+const isActive = (path: string) => normalizePath(currentPath) === normalizePath(path);
+
+const navLinks = [
+  { label: "Startseite", path: "/" },
+  {
+    label: "Leistungen",
+    path: "/leistungen",
+    children: [
+      { label: "Grundpflege", path: "/leistungen#grundpflege" },
+      { label: "Behandlungspflege", path: "/leistungen#behandlungspflege" },
+      { label: "Haushaltshilfe", path: "/leistungen#haushaltshilfe" },
+      { label: "Verhinderungspflege", path: "/leistungen#verhinderungspflege" },
+      { label: "Hausmeisterdienst", path: "/leistungen#hausmeisterdienst" },
+      { label: "Betreutes Wohnen", path: "/leistungen#betreutes-wohnen" },
+      { label: "Pflege vor Ort", path: "/pflege/ambulante-pflege-hildesheim" },
+    ],
+  },
+  { label: "Ablauf", path: "/ablauf" },
+  { label: "Abrechnung", path: "/abrechnung" },
+  {
+    label: "Informationen",
+    path: "/ueber-uns",
+    children: [
+      { label: "Über uns", path: "/ueber-uns" },
+      { label: "FAQ", path: "/faq" },
+      { label: "Ratgeber", path: "/ratgeber" },
+    ],
+  },
+  { label: "Karriere", path: "/karriere" },
+];
+
+const siteUrls = {
+  hildesheim: {
+    haushaltshilfe: "https://positana-haushaltshilfe-hildesheim.de",
+    pflege: "https://positana-pflege-hildesheim.de",
+  },
+  wittingen: {
+    haushaltshilfe: "https://positana-haushaltshilfe-wittingen.de",
+    pflege: "https://positana-pflege-wittingen.de",
+  },
+};
+---
+
+<header data-mobile-menu class="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
+  <div class="border-b border-border">
+    <div class="container mx-auto flex items-center justify-between px-4 py-2 text-sm">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-1.5 text-muted-foreground">
+          <MapPin className="h-3.5 w-3.5" />
+          <a href={siteUrls.hildesheim.pflege} class="rounded-full bg-primary px-2 py-0.5 text-primary-foreground transition-colors">
+            Hildesheim
+          </a>
+          <a href={siteUrls.wittingen.pflege} class="rounded-full px-2 py-0.5 transition-colors hover:text-foreground">
+            Wittingen
+          </a>
+        </div>
+        <div class="hidden items-center gap-1.5 border-l border-border pl-4 text-muted-foreground sm:flex">
+          <Briefcase className="h-3.5 w-3.5" />
+          <a href={siteUrls.hildesheim.haushaltshilfe} class="rounded-full px-2 py-0.5 transition-colors hover:text-foreground">
+            Haushaltshilfe
+          </a>
+          <a href={siteUrls.hildesheim.pflege} class="rounded-full bg-primary px-2 py-0.5 text-primary-foreground transition-colors">
+            Pflege
+          </a>
+        </div>
+      </div>
+      <a href="tel:017619312010" class="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-accent">
+        <Phone className="h-3.5 w-3.5" />
+        <span class="hidden sm:inline">0176 19312010</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container mx-auto flex items-center justify-between px-4 py-3">
+    <a href="/" class="shrink-0">
+      <img src={logo.src} width={1109} height={383} alt="Positana Pflege" class="h-10 w-auto md:h-12" decoding="async" />
+    </a>
+
+    <nav class="hidden items-center gap-6 lg:flex" aria-label="Hauptnavigation">
+      {
+        navLinks.map((link) =>
+          link.children ? (
+            <div class="group relative">
+              <a
+                href={link.path}
+                class={`flex items-center gap-1 transition-colors hover:text-accent ${
+                  isActive(link.path) ? "font-semibold text-accent" : "text-foreground"
+                }`}
+              >
+                {link.label}
+                <ChevronDown className="h-3.5 w-3.5" />
+              </a>
+              <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div class="min-w-[200px] rounded-lg border border-border bg-background py-2 shadow-lg">
+                  {link.children.map((child) => (
+                    <a href={child.path} class="block px-4 py-2 transition-colors hover:bg-muted hover:text-accent">
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={link.path}
+              class={`transition-colors hover:text-accent ${isActive(link.path) ? "font-semibold text-accent" : "text-foreground"}`}
+            >
+              {link.label}
+            </a>
+          )
+        )
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="/kontakt"
+        class="hidden rounded-full bg-accent px-5 py-2.5 font-semibold text-accent-foreground transition-opacity hover:opacity-90 md:inline-flex"
+      >
+        Beratung anfragen
+      </a>
+      <button
+        type="button"
+        data-mobile-menu-button
+        class="p-2 text-foreground lg:hidden"
+        aria-label="Menü"
+        aria-expanded="false"
+      >
+        <Menu data-mobile-menu-open-icon className="h-6 w-6" />
+        <X data-mobile-menu-close-icon className="hidden h-6 w-6" />
+      </button>
+    </div>
+  </div>
+
+  <div data-mobile-menu-panel hidden class="border-t border-border bg-background lg:hidden">
+    <nav class="container mx-auto flex flex-col gap-3 px-4 py-4" aria-label="Mobile Navigation">
+      {
+        navLinks.map((link) => (
+          <div>
+            <a
+              href={link.path}
+              class={`block py-2 text-lg transition-colors hover:text-accent ${isActive(link.path) ? "font-semibold text-accent" : ""}`}
+            >
+              {link.label}
+            </a>
+            {link.children && (
+              <div class="flex flex-col gap-1 pl-4">
+                {link.children.map((child) => (
+                  <a href={child.path} class="block py-1.5 text-muted-foreground transition-colors hover:text-accent">
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        ))
+      }
+      <a
+        href="/kontakt"
+        class="mt-2 rounded-full bg-accent px-5 py-3 text-center font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+      >
+        Beratung anfragen
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (() => {
+    const setupMobileMenu = () => {
+      document.querySelectorAll("[data-mobile-menu]").forEach((root) => {
+        const button = root.querySelector("[data-mobile-menu-button]");
+        const panel = root.querySelector("[data-mobile-menu-panel]");
+        const openIcon = root.querySelector("[data-mobile-menu-open-icon]");
+        const closeIcon = root.querySelector("[data-mobile-menu-close-icon]");
+
+        if (!button || !panel || button.dataset.menuReady === "true") {
+          return;
+        }
+
+        const setOpen = (nextOpen) => {
+          button.setAttribute("aria-expanded", String(nextOpen));
+          panel.hidden = !nextOpen;
+          openIcon?.classList.toggle("hidden", nextOpen);
+          closeIcon?.classList.toggle("hidden", !nextOpen);
+        };
+
+        button.dataset.menuReady = "true";
+        button.addEventListener("click", () => {
+          setOpen(button.getAttribute("aria-expanded") !== "true");
+        });
+
+        panel.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => setOpen(false));
+        });
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", setupMobileMenu, { once: true });
+    } else {
+      setupMobileMenu();
+    }
+  })();
+</script>
