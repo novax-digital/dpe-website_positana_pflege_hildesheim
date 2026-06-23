@@ -68,6 +68,113 @@ const estimateReadingTime = (markdown) => {
   return Math.max(1, Math.ceil(words.length / 220));
 };
 
+const internalLinksBySlug = {
+  "ambulante-pflege-zuhause-richtiger-zeitpunkt": [
+    ["Ablauf der Pflegeberatung", "/ablauf", "So läuft der Einstieg von der ersten Anfrage bis zum Start der Versorgung."],
+    ["Ambulante Pflege Hildesheim", "/pflege/ambulante-pflege-hildesheim", "Unsere lokale Seite zur Pflege in Hildesheim und Umgebung."],
+    ["Kontakt aufnehmen", "/kontakt", "Direkt eine unverbindliche Beratung anfragen."],
+  ],
+  "pflegegrad-beantragen-vorbereitung": [
+    ["Pflegeberatung und Pflegegrad", "/pflege/pflegeberatung-pflegegrad-hildesheim", "Unterstützung bei Pflegegrad, Leistungen und nächster Planung."],
+    ["Abrechnung & Kosten", "/abrechnung", "Was Pflegekasse, Krankenkasse und Entlastungsleistungen bedeuten."],
+    ["FAQ", "/faq", "Antworten auf häufige Fragen zur Pflege in Hildesheim."],
+  ],
+  "behandlungspflege-zuhause-krankenkasse": [
+    ["Behandlungspflege Hildesheim", "/pflege/behandlungspflege-hildesheim", "Mehr zur medizinischen Pflege zu Hause auf ärztliche Verordnung."],
+    ["Leistungen", "/leistungen", "Überblick über Grundpflege, Behandlungspflege und weitere Unterstützung."],
+    ["Kontakt", "/kontakt", "Versorgung mit Verordnung frühzeitig abstimmen."],
+  ],
+  "grundpflege-alltag-wuerde-routinen": [
+    ["Grundpflege Hildesheim", "/pflege/grundpflege-hildesheim", "Mehr zur täglichen Unterstützung bei Körperpflege, Mobilität und Routinen."],
+    ["Leistungen", "/leistungen", "Alle Pflegeleistungen von Positana Pflege im Überblick."],
+    ["Ablauf", "/ablauf", "Wie aus einer Beratung ein passender Pflegeplan wird."],
+  ],
+  "entlastungsbetrag-125-euro-sinnvoll-nutzen": [
+    ["Haushaltshilfe und Alltagsbegleitung", "/pflege/haushaltshilfe-alltagsbegleitung-hildesheim", "Praktische Unterstützung im Alltag und Entlastung für Angehörige."],
+    ["Abrechnung & Kosten", "/abrechnung", "Informationen zu Pflegekasse, Entlastungsbetrag und Eigenanteilen."],
+    ["Kontakt", "/kontakt", "Persönlich klären, welche Entlastung passt."],
+  ],
+  "verhinderungspflege-pause-angehoerige-organisieren": [
+    ["Verhinderungspflege Hildesheim", "/pflege/verhinderungspflege-hildesheim", "Ersatzpflege und Angehörigenentlastung in der Region."],
+    ["Abrechnung & Kosten", "/abrechnung", "Leistungen und Abrechnung transparent einordnen."],
+    ["Kontakt", "/kontakt", "Vertretung frühzeitig anfragen und planen."],
+  ],
+  "betreutes-wohnen-hildesheim-selbststaendig-sicher": [
+    ["Betreutes Wohnen Hildesheim", "/pflege/betreutes-wohnen-hildesheim", "Mehr zur Verbindung von selbstständigem Wohnen und ambulanter Pflege."],
+    ["Leistungen", "/leistungen", "Pflege, Haushaltshilfe und Betreuung nach Bedarf."],
+    ["Kontakt", "/kontakt", "Fragen zur Theaterresidenz und Versorgung besprechen."],
+  ],
+  "sturzprophylaxe-zuhause-tipps": [
+    ["Grundpflege Hildesheim", "/pflege/grundpflege-hildesheim", "Regelmäßige Unterstützung kann Sicherheit und Mobilität stärken."],
+    ["Ambulante Pflege Hildesheim", "/pflege/ambulante-pflege-hildesheim", "Pflege zu Hause mit Blick auf Alltag und Wohnumgebung."],
+    ["Kontakt", "/kontakt", "Individuelle Situation kurz besprechen."],
+  ],
+  "demenz-alltag-orientierung-routinen": [
+    ["Haushaltshilfe und Alltagsbegleitung", "/pflege/haushaltshilfe-alltagsbegleitung-hildesheim", "Begleitung, Betreuung und Entlastung im Alltag."],
+    ["FAQ", "/faq", "Häufige Fragen zu Pflege, Betreuung und Angehörigenentlastung."],
+    ["Kontakt", "/kontakt", "Unterstützung für den Alltag mit Demenz anfragen."],
+  ],
+  "krankenhausentlassung-pflege-zuhause-organisieren": [
+    ["Ablauf", "/ablauf", "Vom ersten Gespräch bis zum Start der Versorgung."],
+    ["Behandlungspflege Hildesheim", "/pflege/behandlungspflege-hildesheim", "Medizinische Pflege zu Hause nach Verordnung."],
+    ["Kontakt", "/kontakt", "Bei bevorstehender Entlassung frühzeitig melden."],
+  ],
+  "angehoerige-entlasten-pflege-aufteilen": [
+    ["Verhinderungspflege Hildesheim", "/pflege/verhinderungspflege-hildesheim", "Planbare Pausen für pflegende Angehörige."],
+    ["Haushaltshilfe und Alltagsbegleitung", "/pflege/haushaltshilfe-alltagsbegleitung-hildesheim", "Praktische Entlastung bei Haushalt, Terminen und Betreuung."],
+    ["Kontakt", "/kontakt", "Gemeinsam Aufgaben und Entlastung sortieren."],
+  ],
+  "hitze-sommer-senioren-pflege": [
+    ["Ambulante Pflege Hildesheim", "/pflege/ambulante-pflege-hildesheim", "Pflege zu Hause mit Blick auf Sicherheit im Alltag."],
+    ["Grundpflege Hildesheim", "/pflege/grundpflege-hildesheim", "Unterstützung bei täglichen Routinen und Beobachtung von Veränderungen."],
+    ["Kontakt", "/kontakt", "Zusätzliche Hilfe für heiße Tage besprechen."],
+  ],
+};
+
+const localContextByCategory = {
+  "Pflege & Organisation":
+    "Gerade in Hildesheim und im Landkreis Hildesheim ist gute Organisation entscheidend: Angehörige, Arztpraxen, Krankenhaus, Pflegekasse und Pflegedienst müssen oft kurzfristig zusammenfinden. Positana Pflege Hildesheim achtet deshalb darauf, Pflege nicht isoliert zu betrachten, sondern als verlässlichen Teil des häuslichen Alltags. Das Ziel ist eine Versorgung, die fachlich passt, für Angehörige verständlich bleibt und für die pflegebedürftige Person möglichst viel Ruhe schafft.",
+  "Alltag im Alter":
+    "Im Alltag älterer Menschen geht es selten nur um einzelne Handgriffe. Häufig zählen vertraute Abläufe, Sicherheit in der Wohnung, persönliche Ansprache und das gute Gefühl, nicht allein entscheiden zu müssen. Positana Pflege Hildesheim verbindet Pflege, Betreuung und praktische Unterstützung so, dass Seniorinnen und Senioren in Hildesheim und Umgebung möglichst lange in vertrauter Umgebung bleiben können.",
+  "Entlastung für Angehörige":
+    "Pflegende Angehörige tragen oft mehr, als von außen sichtbar ist. Neben Pflege und Haushalt kommen Telefonate, Termine, Papierkram und die emotionale Verantwortung hinzu. Positana Pflege Hildesheim unterstützt Familien in Hildesheim und im Landkreis dabei, Aufgaben realistisch zu verteilen und Entlastung frühzeitig einzuplanen, bevor aus Fürsorge Überforderung wird.",
+};
+
+const relatedLocationSentence = (slug) => {
+  if (slug.includes("hildesheim")) {
+    return "Für die Versorgung in Hildesheim selbst ist außerdem wichtig, Wege, feste Einsatzzeiten und vorhandene familiäre Unterstützung gut aufeinander abzustimmen.";
+  }
+
+  return "Auch in Giesen, Sarstedt, Harsum, Nordstemmen und weiteren Orten im Landkreis Hildesheim prüfen wir gemeinsam, welche Unterstützung je nach Bedarf und Kapazität realistisch möglich ist.";
+};
+
+const enrichArticleContent = ({ title, slug, category, content }) => {
+  const internalLinks = internalLinksBySlug[slug] ?? [
+    ["Leistungen", "/leistungen", "Überblick über Pflege, Betreuung und Entlastung."],
+    ["Kontakt", "/kontakt", "Persönliche Beratung anfragen."],
+  ];
+  const linkList = internalLinks.map(([label, href, text]) => `- [${label}](${href}): ${text}`).join("\n");
+  const localContext = localContextByCategory[category] ?? localContextByCategory["Pflege & Organisation"];
+
+  return [
+    content,
+    "## Einordnung für Hildesheim und Umgebung",
+    `${localContext} ${relatedLocationSentence(slug)}`,
+    "Wer Pflege organisiert, sollte deshalb nicht nur an die einzelne Leistung denken, sondern an die Frage: Was macht den Alltag morgen, nächste Woche und in den kommenden Monaten stabiler? Genau an dieser Stelle lohnt sich ein persönliches Gespräch, weil sich Pflegegrad, Verordnung, Angehörigenhilfe und Finanzierung oft sinnvoll kombinieren lassen.",
+    "## Passende nächste Schritte",
+    `Wenn Sie sich mit dem Thema „${title}” beschäftigen, helfen diese Seiten als nächster Einstieg:`,
+    linkList,
+    "## Kleine Checkliste vor dem Beratungsgespräch",
+    "Für ein erstes Gespräch brauchen Sie nicht alle Unterlagen perfekt vorbereitet zu haben. Hilfreich ist aber, wenn Sie einige Punkte grob einschätzen können:",
+    "- Welche Aufgaben fallen im Alltag aktuell schwer?",
+    "- Gibt es bereits einen Pflegegrad oder wurde ein Antrag gestellt?",
+    "- Liegt eine ärztliche Verordnung vor oder steht ein Krankenhausaufenthalt an?",
+    "- Wer aus der Familie unterstützt bereits und wo entsteht Überlastung?",
+    "- Welche Zeiten, Routinen oder Gewohnheiten sind der pflegebedürftigen Person besonders wichtig?",
+    "> **Persönliche Pflegeberatung in Hildesheim:** Wenn Sie unsicher sind, welcher nächste Schritt passt, sprechen Sie mit Positana Pflege Hildesheim. Wir sortieren gemeinsam Pflegebedarf, mögliche Leistungen und Abrechnung. [Jetzt unverbindlich Kontakt aufnehmen](/kontakt).",
+  ].join("\n\n");
+};
+
 const article = ({
   title,
   slug,
@@ -93,6 +200,7 @@ const article = ({
     ]),
     closing,
   ].join("\n\n");
+  const enrichedContent = enrichArticleContent({ title, slug, category, content });
 
   return {
     title,
@@ -102,7 +210,7 @@ const article = ({
     publishedAt,
     imageFilename,
     imageAlt,
-    content,
+    content: enrichedContent,
   };
 };
 
@@ -620,6 +728,7 @@ const uploadImage = async (post) => {
 
 const seed = async () => {
   const rows = [];
+  const seededAt = new Date().toISOString();
 
   for (const post of posts) {
     const coverImageUrl = await uploadImage(post);
@@ -636,7 +745,7 @@ const seed = async () => {
       published: true,
       published_at: post.publishedAt,
       created_at: post.publishedAt,
-      updated_at: post.publishedAt,
+      updated_at: seededAt,
     });
   }
 
