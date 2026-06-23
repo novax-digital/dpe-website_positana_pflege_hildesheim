@@ -1,0 +1,14 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicPage from "@/components/PublicPage";
+import { getPublishedBlogPosts } from "@/lib/supabase.server";
+
+const articles = await getPublishedBlogPosts();
+---
+
+<BaseLayout
+  title="Ratgeber"
+  description="Tipps und Wissen rund um Pflege, Entlastung und Alltag im Alter. Der Ratgeber von Positana Pflege Hildesheim."
+>
+  <PublicPage page="Ratgeber" currentPath={Astro.url.pathname} articles={articles} client:load />
+</BaseLayout>

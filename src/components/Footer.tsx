@@ -1,0 +1,97 @@
+import { Link } from "react-router-dom";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import logo from "@/assets/logo.png";
+
+const Footer = () => {
+  return (
+    <footer className="bg-primary text-primary-foreground">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* About */}
+          <div>
+            <img src={logo.src} width={1109} height={383} alt="Positana" className="h-10 w-auto mb-4 brightness-0 invert" loading="lazy" decoding="async" />
+            <p className="text-primary-foreground/80 leading-relaxed">
+              Seit 1993 begleiten wir Menschen im Alltag – mit Herz, Verlässlichkeit und einem offenen Ohr für Ihre Wünsche.
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <h4 className="font-serif text-lg mb-4">Navigation</h4>
+            <ul className="space-y-2">
+              {[
+                { label: "Startseite", path: "/" },
+                { label: "Leistungen", path: "/leistungen" },
+                { label: "Über uns", path: "/ueber-uns" },
+                { label: "Ablauf", path: "/ablauf" },
+                { label: "Abrechnung", path: "/abrechnung" },
+                { label: "FAQ", path: "/faq" },
+                { label: "Ratgeber", path: "/ratgeber" },
+                { label: "Kontakt", path: "/kontakt" },
+              ].map((link) => (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="font-serif text-lg mb-4">Kontakt</h4>
+            <ul className="space-y-3 text-primary-foreground/80">
+              <li className="flex items-start gap-2">
+                <Phone className="w-4 h-4 mt-1 shrink-0" />
+                <div>
+                  <a href="tel:017619312010" className="hover:text-accent transition-colors block">0176 19312010</a>
+                </div>
+              </li>
+              <li className="flex items-start gap-2">
+                <Mail className="w-4 h-4 mt-1 shrink-0" />
+                <a href="mailto:info@positana-pflege.de" className="hover:text-accent transition-colors">
+                  info@positana-pflege.de
+                </a>
+              </li>
+              <li className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-1 shrink-0" />
+                <span>Brückenstr. 3, 31180 Giesen</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Clock className="w-4 h-4 mt-1 shrink-0" />
+                <span>Mo–Fr: 8:00–14:00 Uhr</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="font-serif text-lg mb-4">Rechtliches</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/impressum" className="text-primary-foreground/70 hover:text-accent transition-colors">
+                  Impressum
+                </Link>
+              </li>
+              <li>
+                <Link to="/datenschutz" className="text-primary-foreground/70 hover:text-accent transition-colors">
+                  Datenschutzerklärung
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-primary-foreground/20 text-center text-primary-foreground/50 text-sm">
+          © {new Date().getFullYear()} Positana Pflege. Alle Rechte vorbehalten.
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

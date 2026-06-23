@@ -1,0 +1,14 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicPage from "@/components/PublicPage";
+import { getPublishedJobListings } from "@/lib/supabase.server";
+
+const jobs = await getPublishedJobListings();
+---
+
+<BaseLayout
+  title="Karriere"
+  description="Pflegejobs bei Positana Pflege Hildesheim. Bewerben Sie sich als Pflegefachkraft, Pflegehilfskraft oder Alltagsbegleiter:in - flexible Arbeitszeiten, faire Vergütung."
+>
+  <PublicPage page="Karriere" currentPath={Astro.url.pathname} jobs={jobs} client:load />
+</BaseLayout>

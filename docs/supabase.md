@@ -1,0 +1,63 @@
+# Supabase Backend
+
+Das Backend orientiert sich an der Lovable-Codebase und nutzt dieselben Kernobjekte:
+
+- `blog_posts` für den Ratgeber
+- `job_listings` für Stellenanzeigen
+- `contact_messages` für Kontaktanfragen
+- `job_applications` für Bewerbungen
+- privater Storage-Bucket `resumes` für Bewerbungsdateien
+
+## Environment
+
+```bash
+PUBLIC_SUPABASE_URL=https://dein-projekt.supabase.co
+PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+SUPABASE_DB_URL=postgres://postgres.PROJECT_REF:PASSWORT@REGION.pooler.supabase.com:5432/postgres
+SUPABASE_RESUME_BUCKET=resumes
+ADMIN_EMAIL=p.polley@deutsche-pflegeentwicklung.de
+ADMIN_PASSWORD=...
+```
+
+`SUPABASE_SERVICE_ROLE_KEY` ist server-only und darf nicht in Client-Code landen. Auf Vercel gehört er in die Environment Variables des Projekts.
+
+`SUPABASE_DB_URL` wird nur für das initiale Setup gebraucht. Du findest sie im Supabase Dashboard unter **Connect** als Session-Pooler-Connection-String. Dafür wird das Datenbankpasswort benötigt, nicht das Admin-Login-Passwort der Website.
+
+## Setup Ausführen
+
+1. `.env.example` nach `.env` kopieren oder die Werte direkt lokal exportieren.
+2. `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL` und `ADMIN_PASSWORD` setzen.
+3. Setup starten:
+
+```bash
+npm run supabase:setup
+```
+
+Das Script führt alle SQL-Dateien aus `supabase/migrations` aus, prüft Tabellen und Bucket und legt danach den Admin-User an oder aktualisiert ihn.
+
+## Datenmodell
+
+Die SQL-Dateien liegen unter `supabase/migrations`. Sie stammen aus der Lovable-Basis, wurden aber für diese Astro-Version an zwei Stellen angepasst:
+
+- Standard-Ort für Jobs ist `Hildesheim`.
+- Kontaktanfragen, Bewerbungen und Datei-Uploads werden nicht öffentlich direkt in Supabase geschrieben, sondern über Astro-API-Routen validiert und mit Service-Role gespeichert.
+
+## Routen
+
+- `/ratgeber` liest veröffentlichte `blog_posts`.
+- `/ratgeber/[slug]` liest einen veröffentlichten Beitrag über `slug`.
+- `/karriere` liest veröffentlichte `job_listings`.
+- `/api/contact` erstellt `contact_messages`.
+- `/api/applications/upload-url` erstellt signierte Upload-Ziele für Dateien im Bucket `resumes`.
+- `/api/applications` erstellt `job_applications` und speichert die Upload-Pfade im alten Lovable-Feld `resume_url`.
+
+## Bewerbungsdateien
+
+Bewerbungsdateien laufen Vercel-tauglich:
+
+1. Das Formular fragt pro Datei eine signierte Upload-URL an.
+2. Der Browser lädt die Datei direkt zu Supabase Storage hoch.
+3. Die Astro-API speichert danach nur die Storage-Pfade in `job_applications.resume_url`.
+
+Damit umgehen wir das Vercel Function Body Limit für größere Uploads.

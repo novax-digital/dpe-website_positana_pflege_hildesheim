@@ -1,0 +1,155 @@
+---
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  type?: string;
+  noindex?: boolean;
+  jsonLd?: unknown | unknown[];
+}
+
+const SITE_NAME = "Positana Pflege Hildesheim";
+const SITE_URL = "https://positana-pflege-hildesheim.de";
+const { title, description, canonical, type = "website", noindex = false, jsonLd } = Astro.props;
+const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+const canonicalPath = Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
+const canonicalUrl = canonical ?? new URL(canonicalPath, SITE_URL).toString();
+const socialImageUrl = new URL("/og-image.jpg", SITE_URL).toString();
+const routeLabels: Record<string, string> = {
+  "leistungen": "Leistungen",
+  "ueber-uns": "Über uns",
+  "ablauf": "Ablauf",
+  "abrechnung": "Abrechnung",
+  "faq": "FAQ",
+  "ratgeber": "Ratgeber",
+  "kontakt": "Kontakt",
+  "karriere": "Karriere",
+  "impressum": "Impressum",
+  "datenschutz": "Datenschutz",
+};
+const pathSegments = Astro.url.pathname.split("/").filter(Boolean);
+const breadcrumbJsonLd =
+  pathSegments.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Startseite",
+            item: new URL("/", SITE_URL).toString(),
+          },
+          ...pathSegments.map((segment, index) => {
+            const route = `/${pathSegments.slice(0, index + 1).join("/")}`;
+            return {
+              "@type": "ListItem",
+              position: index + 2,
+              name: routeLabels[segment] ?? segment,
+              item: new URL(route, SITE_URL).toString(),
+            };
+          }),
+        ],
+      }
+    : null;
+const jsonLdItems = [
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "@id": `${SITE_URL}/#organization`,
+    name: "Positana Pflege Hildesheim",
+    description:
+      "Ambulanter Pflegedienst in Hildesheim: Grund- und Behandlungspflege, Verhinderungspflege, Betreutes Wohnen in der Theaterresidenz sowie Alltagsbegleitung. Seit 1993.",
+    url: SITE_URL,
+    logo: new URL("/favicon.svg", SITE_URL).toString(),
+    image: socialImageUrl,
+    telephone: "+4917619312010",
+    email: "info@positana-pflege.de",
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Brückenstr. 3",
+      postalCode: "31180",
+      addressLocality: "Giesen",
+      addressRegion: "Niedersachsen",
+      addressCountry: "DE",
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Hildesheim",
+    },
+    foundingDate: "1993",
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:00",
+        closes: "14:00",
+      },
+    ],
+    medicalSpecialty: "Geriatric",
+    serviceType: [
+      "Ambulante Pflege",
+      "Grundpflege",
+      "Behandlungspflege",
+      "Verhinderungspflege",
+      "Betreutes Wohnen",
+      "Alltagsbegleitung",
+      "Seniorenbetreuung",
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: SITE_URL,
+    inLanguage: "de-DE",
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
+    },
+  },
+  ...(breadcrumbJsonLd ? [breadcrumbJsonLd] : []),
+  ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
+];
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#00667a" />
+    <meta name="format-detection" content="telephone=yes" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Positana Pflege" />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="Positana Pflege Hildesheim - fürsorgliche Begleitung im Alltag" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="Positana Pflege" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+
+    {jsonLdItems.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />)}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

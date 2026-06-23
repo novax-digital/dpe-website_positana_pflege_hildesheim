@@ -1,0 +1,10 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { AdminApp } from "@/admin/AdminApp";
+
+const id = Astro.params.id ?? "neu";
+---
+
+<BaseLayout title="Ratgeber bearbeiten" description="Ratgeber bearbeiten" noindex>
+  <AdminApp page="blog-edit" recordId={id} client:only="react" />
+</BaseLayout>

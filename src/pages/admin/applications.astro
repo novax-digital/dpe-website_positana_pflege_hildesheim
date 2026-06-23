@@ -1,0 +1,8 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { AdminApp } from "@/admin/AdminApp";
+---
+
+<BaseLayout title="Bewerbungen" description="Bewerbungen verwalten" noindex>
+  <AdminApp page="applications" client:only="react" />
+</BaseLayout>

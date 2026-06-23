@@ -1,0 +1,13 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "react-router-dom": ["src/lib/router.tsx"]
+    },
+    "jsx": "react-jsx",
+    "strictNullChecks": false,
+    "noImplicitAny": false
+  }
+}

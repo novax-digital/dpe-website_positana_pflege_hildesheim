@@ -1,0 +1,8 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicPage from "@/components/PublicPage";
+---
+
+<BaseLayout title="Impressum" description="Impressum von Positana Pflege Hildesheim." noindex>
+  <PublicPage page="Impressum" currentPath={Astro.url.pathname} client:load />
+</BaseLayout>

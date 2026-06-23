@@ -1,0 +1,23 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicPage from "@/components/PublicPage";
+import { getBlogPostBySlug } from "@/lib/supabase.server";
+
+export const prerender = false;
+
+const slug = Astro.params.slug ?? "";
+const post = await getBlogPostBySlug(slug);
+
+if (!post) {
+  Astro.response.status = 404;
+}
+---
+
+<BaseLayout
+  title={post?.title || "Beitrag nicht gefunden"}
+  description={post?.excerpt || post?.title || "Der angeforderte Ratgeber-Beitrag konnte nicht gefunden werden."}
+  type="article"
+  noindex={!post}
+>
+  <PublicPage page="BlogPost" currentPath={Astro.url.pathname} post={post} client:load />
+</BaseLayout>

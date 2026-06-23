@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PublicPage from "@/components/PublicPage";
+---
+
+<BaseLayout
+  title="Über uns"
+  description="Positana Pflege - seit 1993 Ihr verlässlicher Partner für Senioren in Hildesheim. Erfahren Sie mehr über unser Team und unsere Werte."
+>
+  <PublicPage page="UeberUns" currentPath={Astro.url.pathname} client:load />
+</BaseLayout>
