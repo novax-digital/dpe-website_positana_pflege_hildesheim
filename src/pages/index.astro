@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PublicPage from "@/components/PublicPage";
 ---
@@ -7,5 +8,5 @@ import PublicPage from "@/components/PublicPage";
   title="Ambulante Pflege in Hildesheim"
   description="Positana Pflege Hildesheim: Ambulante Pflege, Grund- und Behandlungspflege, Betreutes Wohnen in der Theaterresidenz und Alltagsbegleitung. Seit 1993. Direkte Abrechnung mit allen Pflege- und Krankenkassen."
 >
-  <PublicPage page="Index" currentPath={Astro.url.pathname} client:load />
+  <PublicPage page="Index" currentPath={Astro.url.pathname} client:idle />
 </BaseLayout>

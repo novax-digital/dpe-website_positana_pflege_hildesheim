@@ -1,8 +1,9 @@
 ---
+export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import NotFound from "@/react-pages/NotFound";
 ---
 
 <BaseLayout title="Seite nicht gefunden" description="Die angeforderte Seite konnte nicht gefunden werden." noindex>
-  <NotFound client:load />
+  <NotFound client:idle />
 </BaseLayout>

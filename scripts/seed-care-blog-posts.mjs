@@ -114,7 +114,7 @@ const posts = [
       "Ambulante Pflege beginnt oft nicht mit einem großen Einschnitt, sondern mit kleinen Veränderungen im Alltag. Diese Hinweise helfen Angehörigen bei der Einordnung.",
     category: "Pflege & Organisation",
     publishedAt: "2026-01-08T12:00:00.000Z",
-    imageFilename: "2026-01-08-ambulante-pflege-zuhause.png",
+    imageFilename: "2026-01-08-ambulante-pflege-zuhause.webp",
     imageAlt: "Seniorin und Pflegekraft besprechen ambulante Pflege am Wohnzimmertisch",
     intro:
       "Viele Familien fragen sich, wann professionelle Unterstützung zu Hause sinnvoll wird. Häufig gibt es keinen einzelnen Auslöser. Stattdessen verändern sich Routinen: Einkäufe bleiben liegen, Medikamente werden unregelmäßig genommen oder die Körperpflege fällt schwerer. Ambulante Pflege kann dann helfen, Sicherheit und Selbstständigkeit zu verbinden.",
@@ -156,7 +156,7 @@ const posts = [
       "Ein Pflegegrad entscheidet darüber, welche Unterstützung finanziert werden kann. Mit guter Vorbereitung wird der Antrag für Angehörige deutlich übersichtlicher.",
     category: "Pflege & Organisation",
     publishedAt: "2026-01-22T12:00:00.000Z",
-    imageFilename: "2026-01-22-pflegegrad-beantragen.png",
+    imageFilename: "2026-01-22-pflegegrad-beantragen.webp",
     imageAlt: "Angehörige sortieren Unterlagen für den Pflegegrad-Antrag am Küchentisch",
     intro:
       "Der Pflegegrad ist für viele Leistungen der Pflegeversicherung entscheidend. Trotzdem wirkt der Antrag auf Angehörige oft kompliziert. Wer die Situation vor dem Begutachtungstermin gut dokumentiert, kann den tatsächlichen Unterstützungsbedarf besser sichtbar machen.",
@@ -198,7 +198,7 @@ const posts = [
       "Behandlungspflege umfasst medizinische Leistungen auf ärztliche Verordnung. Wir erklären, was darunter fällt und wie die Versorgung zu Hause organisiert wird.",
     category: "Pflege & Organisation",
     publishedAt: "2026-02-06T12:00:00.000Z",
-    imageFilename: "2026-02-06-behandlungspflege-krankenkasse.png",
+    imageFilename: "2026-02-06-behandlungspflege-krankenkasse.webp",
     imageAlt: "Pflegefachkraft misst Blutdruck bei einem Senior zu Hause",
     intro:
       "Behandlungspflege ist medizinische Pflege, die zu Hause durchgeführt wird. Sie wird nicht über die Pflegekasse, sondern in der Regel über die Krankenkasse abgerechnet. Grundlage ist eine ärztliche Verordnung.",
@@ -241,7 +241,7 @@ const posts = [
       "Grundpflege ist mehr als Hilfe beim Waschen oder Anziehen. Gute Pflege erhält Selbstständigkeit, Würde und vertraute Tagesabläufe.",
     category: "Alltag im Alter",
     publishedAt: "2026-02-20T12:00:00.000Z",
-    imageFilename: "2026-02-20-grundpflege-alltag.png",
+    imageFilename: "2026-02-20-grundpflege-alltag.webp",
     imageAlt: "Pflegekraft reicht einer Seniorin ein Handtuch in einer hellen Wohnung",
     intro:
       "Wenn alltägliche Dinge schwerer werden, kann Grundpflege entlasten. Dabei geht es nicht darum, Menschen möglichst viel abzunehmen. Gute Pflege unterstützt dort, wo Hilfe nötig ist, und lässt Raum für das, was weiterhin selbst gelingt.",
@@ -283,7 +283,7 @@ const posts = [
       "Der Entlastungsbetrag kann pflegebedürftige Menschen und Angehörige spürbar unterstützen. Wichtig ist, ihn passend zum Alltag einzusetzen.",
     category: "Entlastung für Angehörige",
     publishedAt: "2026-03-06T12:00:00.000Z",
-    imageFilename: "2026-03-06-entlastungsbetrag-nutzen.png",
+    imageFilename: "2026-03-06-entlastungsbetrag-nutzen.webp",
     imageAlt: "Seniorin plant mit Pflegekraft Haushaltshilfe und Alltagstermine am Küchentisch",
     intro:
       "Pflegebedürftige Menschen mit anerkanntem Pflegegrad haben in der Regel Anspruch auf einen monatlichen Entlastungsbetrag. Dieser Betrag soll den Alltag erleichtern und Angehörige entlasten. Entscheidend ist, die Unterstützung so zu planen, dass sie wirklich hilft.",
@@ -325,7 +325,7 @@ const posts = [
       "Pflegende Angehörige brauchen Erholung. Verhinderungspflege kann helfen, Versorgung zuverlässig abzusichern, wenn Angehörige ausfallen oder eine Pause benötigen.",
     category: "Entlastung für Angehörige",
     publishedAt: "2026-03-20T12:00:00.000Z",
-    imageFilename: "2026-03-20-verhinderungspflege-angehoerige.png",
+    imageFilename: "2026-03-20-verhinderungspflege-angehoerige.webp",
     imageAlt: "Pflegekraft übernimmt freundlich die Betreuung eines Seniors auf einer Terrasse",
     intro:
       "Wer einen Angehörigen pflegt, leistet viel. Termine, Urlaub, Krankheit oder einfach Erschöpfung machen Pausen notwendig. Verhinderungspflege sorgt dafür, dass die Versorgung weiterläuft, wenn die private Pflegeperson vorübergehend verhindert ist.",
@@ -367,7 +367,7 @@ const posts = [
       "Betreutes Wohnen verbindet Privatsphäre mit Unterstützung bei Bedarf. Für viele Seniorinnen und Senioren ist das ein guter Mittelweg.",
     category: "Alltag im Alter",
     publishedAt: "2026-04-07T12:00:00.000Z",
-    imageFilename: "2026-04-07-betreutes-wohnen-hildesheim.png",
+    imageFilename: "2026-04-07-betreutes-wohnen-hildesheim.webp",
     imageAlt: "Seniorin in einer hellen barrierearmen Wohnung mit unterstützender Pflegekraft",
     intro:
       "Viele ältere Menschen möchten selbstbestimmt wohnen und gleichzeitig wissen, dass Unterstützung erreichbar ist. Betreutes Wohnen kann genau diesen Rahmen bieten: ein eigenes Zuhause, vertraute Routinen und Hilfe, wenn sie gebraucht wird.",
@@ -403,7 +403,7 @@ const posts = [
       "Stürze lassen sich nicht immer verhindern, aber viele Risiken können zu Hause deutlich reduziert werden. Schon kleine Veränderungen helfen.",
     category: "Alltag im Alter",
     publishedAt: "2026-04-21T12:00:00.000Z",
-    imageFilename: "2026-04-21-sturzprophylaxe-zuhause.png",
+    imageFilename: "2026-04-21-sturzprophylaxe-zuhause.webp",
     imageAlt: "Pflegekraft prüft mit einem Senior einen sicheren Flur und Rollator",
     intro:
       "Ein Sturz kann im Alter viel verändern. Deshalb ist Vorbeugung so wichtig. Sturzprophylaxe beginnt nicht erst bei Hilfsmitteln, sondern bei einem wachen Blick auf Wohnung, Routinen und körperliche Sicherheit.",
@@ -445,7 +445,7 @@ const posts = [
       "Bei Demenz helfen klare Strukturen, vertraute Gegenstände und ruhige Kommunikation. Angehörige können den Alltag mit kleinen Maßnahmen spürbar erleichtern.",
     category: "Alltag im Alter",
     publishedAt: "2026-05-08T12:00:00.000Z",
-    imageFilename: "2026-05-08-demenz-alltag-routinen.png",
+    imageFilename: "2026-05-08-demenz-alltag-routinen.webp",
     imageAlt: "Pflegekraft und Seniorin betrachten vertraute Erinnerungsgegenstände im Wohnzimmer",
     intro:
       "Demenz verändert nicht nur das Gedächtnis, sondern oft den gesamten Alltag. Orientierung, Sprache, Stimmung und Sicherheit können schwanken. Gerade deshalb sind Ruhe und vertraute Abläufe so wertvoll.",
@@ -481,7 +481,7 @@ const posts = [
       "Nach einem Krankenhausaufenthalt muss Pflege oft kurzfristig organisiert werden. Mit klarer Vorbereitung gelingt der Übergang nach Hause ruhiger.",
     category: "Pflege & Organisation",
     publishedAt: "2026-05-22T12:00:00.000Z",
-    imageFilename: "2026-05-22-krankenhausentlassung-pflege.png",
+    imageFilename: "2026-05-22-krankenhausentlassung-pflege.webp",
     imageAlt: "Seniorin kommt nach Krankenhausaufenthalt nach Hause und spricht mit Pflegekraft und Angehörigem",
     intro:
       "Die Entlassung aus dem Krankenhaus ist für Familien oft ein Wendepunkt. Plötzlich werden Medikamente, Mobilität, Verbände, Hilfsmittel oder Haushalt zu Hause neu organisiert. Je früher die Planung beginnt, desto ruhiger gelingt der Übergang.",
@@ -523,7 +523,7 @@ const posts = [
       "Pflege gelingt langfristig besser, wenn Aufgaben klar verteilt werden. Angehörige, Pflegedienst und Umfeld können gemeinsam ein stabiles Netz bilden.",
     category: "Entlastung für Angehörige",
     publishedAt: "2026-06-06T12:00:00.000Z",
-    imageFilename: "2026-06-06-angehoerige-entlasten.png",
+    imageFilename: "2026-06-06-angehoerige-entlasten.webp",
     imageAlt: "Familie und Pflegekraft besprechen gemeinsam einen Pflegeplan am Wohnzimmertisch",
     intro:
       "Viele Angehörige übernehmen Pflege aus Liebe und Verantwortungsgefühl. Mit der Zeit kann daraus eine große Belastung werden. Entlastung beginnt, wenn Aufgaben sichtbar gemacht und fair verteilt werden.",
@@ -559,7 +559,7 @@ const posts = [
       "Heiße Tage können ältere Menschen stark belasten. Mit einfachen Routinen lassen sich Flüssigkeit, Raumklima und Wohlbefinden besser im Blick behalten.",
     category: "Alltag im Alter",
     publishedAt: "2026-06-20T12:00:00.000Z",
-    imageFilename: "2026-06-20-hitze-sommer-pflege.png",
+    imageFilename: "2026-06-20-hitze-sommer-pflege.webp",
     imageAlt: "Pflegekraft reicht einer Seniorin im Sommer ein Glas Wasser auf einem hellen Balkon",
     intro:
       "Sommerhitze ist für ältere Menschen oft anstrengender als für jüngere. Durstgefühl, Kreislauf, Medikamente und Vorerkrankungen können eine Rolle spielen. Gute Pflege achtet deshalb besonders auf Flüssigkeit, Schatten und Ruhe.",
@@ -606,7 +606,7 @@ const uploadImage = async (post) => {
   const file = fs.readFileSync(imagePath);
   const { error } = await supabase.storage.from(bucketName).upload(storagePath, file, {
     cacheControl: "31536000",
-    contentType: "image/png",
+    contentType: post.imageFilename.endsWith(".webp") ? "image/webp" : "image/png",
     upsert: true,
   });
 

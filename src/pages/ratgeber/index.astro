@@ -6,6 +6,7 @@ import { absoluteUrl, blogCollectionJsonLd } from "@/lib/seo";
 
 const articles = await getPublishedBlogPosts();
 const canonicalUrl = absoluteUrl("/ratgeber");
+Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
 ---
 
 <BaseLayout
@@ -14,5 +15,5 @@ const canonicalUrl = absoluteUrl("/ratgeber");
   schemaType="CollectionPage"
   jsonLd={blogCollectionJsonLd(articles, canonicalUrl)}
 >
-  <PublicPage page="Ratgeber" currentPath={Astro.url.pathname} articles={articles} client:load />
+  <PublicPage page="Ratgeber" currentPath={Astro.url.pathname} articles={articles} client:idle />
 </BaseLayout>

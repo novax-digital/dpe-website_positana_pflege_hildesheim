@@ -29,5 +29,5 @@ if (!landingPage) {
   jsonLd={landingPage ? landingPageJsonLd(landingPage, canonicalUrl) : undefined}
   noindex={!landingPage}
 >
-  <PublicPage page="SeoLandingPage" currentPath={Astro.url.pathname} landingPage={landingPage} client:load />
+  <PublicPage page="SeoLandingPage" currentPath={Astro.url.pathname} landingPage={landingPage} client:idle />
 </BaseLayout>

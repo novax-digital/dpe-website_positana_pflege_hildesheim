@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PublicPage from "@/components/PublicPage";
 ---
@@ -7,5 +8,5 @@ import PublicPage from "@/components/PublicPage";
   title="Pflegekosten & Abrechnung"
   description="Pflegeleistungen direkt mit Pflege- und Krankenkasse abrechnen: Pflegesachleistungen §36, Behandlungspflege §37, Entlastungsbetrag §45b und Verhinderungspflege §39. Positana Pflege Hildesheim berät Sie transparent."
 >
-  <PublicPage page="Abrechnung" currentPath={Astro.url.pathname} client:load />
+  <PublicPage page="Abrechnung" currentPath={Astro.url.pathname} client:idle />
 </BaseLayout>

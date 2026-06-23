@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Home, HeartPulse, Stethoscope, CalendarClock, Building2, Wrench, Phone, ArrowRight, Star, Shield, Heart, FileCheck, Wallet, BadgeCheck } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import heroImg from "@/assets/hero.jpg";
+import heroImg from "@/assets/hero.webp";
 import SEO from "@/components/SEO";
 
 const Index = () => {
@@ -17,8 +17,8 @@ const Index = () => {
         <div className="absolute inset-0">
           <img
             src={heroImg.src}
-            width={1920}
-            height={1280}
+            width={1600}
+            height={1067}
             alt="Fürsorgliche Begleitung"
             className="w-full h-full object-cover"
             loading="eager"

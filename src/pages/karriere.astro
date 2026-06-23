@@ -6,6 +6,7 @@ import { jobPostingJsonLd } from "@/lib/seo";
 
 const jobs = await getPublishedJobListings();
 const jobJsonLd = jobs.map((job) => jobPostingJsonLd(job));
+Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
 ---
 
 <BaseLayout
@@ -13,5 +14,5 @@ const jobJsonLd = jobs.map((job) => jobPostingJsonLd(job));
   description="Pflegejobs bei Positana Pflege Hildesheim. Bewerben Sie sich als Pflegefachkraft, Pflegehilfskraft oder Alltagsbegleiter:in - flexible Arbeitszeiten, faire Vergütung."
   jsonLd={jobJsonLd}
 >
-  <PublicPage page="Karriere" currentPath={Astro.url.pathname} jobs={jobs} client:load />
+  <PublicPage page="Karriere" currentPath={Astro.url.pathname} jobs={jobs} client:idle />
 </BaseLayout>
