@@ -247,8 +247,12 @@ const SeoLandingPage = ({ landingPage }: SeoLandingPageProps) => {
                 to={`/pflege/${related.slug}`}
                 className="fade-in-section rounded-xl border border-border p-5 transition-colors hover:border-accent/50"
               >
-                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.12em] text-accent">
-                  {related.kind === "location" ? "Standort" : "Leistung"}
+                <p
+                  className={`mb-2 text-sm font-semibold text-accent ${
+                    related.kind === "location" ? "" : "uppercase tracking-[0.12em]"
+                  }`}
+                >
+                  {related.kind === "location" ? "Wir sind hier für Sie da" : "Leistung"}
                 </p>
                 <h3 className="font-serif text-xl leading-snug">{related.title}</h3>
               </Link>
