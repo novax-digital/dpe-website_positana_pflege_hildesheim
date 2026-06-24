@@ -2,6 +2,33 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import logo from "@/assets/logo.png";
 
+const InstagramMark = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect width="18" height="18" x="3" y="3" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <path d="M17.5 6.5h.01" />
+  </svg>
+);
+
+const FacebookMark = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 8h2.5V5H14a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h2.5l.5-3h-3V9a1 1 0 0 1 1-1Z" />
+  </svg>
+);
+
+const socialLinks = [
+  {
+    label: "Positana Hildesheim auf Instagram",
+    href: "https://www.instagram.com/positana.hildesheim/",
+    Icon: InstagramMark,
+  },
+  {
+    label: "Positana Hildesheim auf Facebook",
+    href: "https://www.facebook.com/positana.hildesheim",
+    Icon: FacebookMark,
+  },
+];
+
 const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -13,6 +40,20 @@ const Footer = () => {
             <p className="text-primary-foreground/80 leading-relaxed">
               Seit 1993 begleiten wir Menschen im Alltag – mit Herz, Verlässlichkeit und einem offenen Ohr für Ihre Wünsche.
             </p>
+            <div className="mt-5 flex items-center gap-3">
+              {socialLinks.map(({ label, href, Icon }) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-foreground/25 text-primary-foreground/80 transition-colors hover:border-accent hover:text-accent"
+                >
+                  <Icon className="h-4 w-4" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Navigation */}
