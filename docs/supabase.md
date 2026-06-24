@@ -19,7 +19,7 @@ SUPABASE_DB_URL=postgres://postgres.PROJECT_REF:PASSWORT@REGION.pooler.supabase.
 SUPABASE_RESUME_BUCKET=resumes
 RESEND_API_KEY=...
 RESEND_FROM_EMAIL=Positana Pflege <kontakt@positana-pflege-hildesheim.de>
-RESEND_NOTIFICATION_EMAIL=info@positana-pflege.de
+RESEND_NOTIFICATION_EMAIL=info@positana-pflege-hildesheim.de
 ADMIN_EMAIL=p.polley@deutsche-pflegeentwicklung.de
 ADMIN_PASSWORD=...
 ```

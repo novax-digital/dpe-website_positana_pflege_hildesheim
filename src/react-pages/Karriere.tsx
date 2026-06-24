@@ -219,8 +219,8 @@ const Karriere = ({ jobs = [] }: { jobs?: JobListing[] }) => {
             <a href="tel:017619312010" className="flex items-center gap-2 text-primary hover:text-accent transition-colors">
               <Phone className="h-4 w-4" /> 0176 19312010
             </a>
-            <a href="mailto:info@positana-pflege.de" className="flex items-center gap-2 text-primary hover:text-accent transition-colors">
-              <Mail className="h-4 w-4" /> info@positana-pflege.de
+            <a href="mailto:info@positana-pflege-hildesheim.de" className="flex items-center gap-2 text-primary hover:text-accent transition-colors">
+              <Mail className="h-4 w-4" /> info@positana-pflege-hildesheim.de
             </a>
           </div>
 

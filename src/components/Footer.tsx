@@ -94,8 +94,8 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="w-4 h-4 mt-1 shrink-0" />
-                <a href="mailto:info@positana-pflege.de" className="hover:text-accent transition-colors">
-                  info@positana-pflege.de
+                <a href="mailto:info@positana-pflege-hildesheim.de" className="hover:text-accent transition-colors">
+                  info@positana-pflege-hildesheim.de
                 </a>
               </li>
               <li className="flex items-start gap-2">

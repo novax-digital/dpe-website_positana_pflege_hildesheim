@@ -41,7 +41,7 @@ const Datenschutz = () => (
             </p>
             <p>
               Telefon: <a href="tel:017619312010" className="text-accent hover:underline">0176 19312010</a><br />
-              E-Mail: <a href="mailto:info@positana-pflege.de" className="text-accent hover:underline">info@positana-pflege.de</a>
+              E-Mail: <a href="mailto:info@positana-pflege-hildesheim.de" className="text-accent hover:underline">info@positana-pflege-hildesheim.de</a>
             </p>
           </Section>
 

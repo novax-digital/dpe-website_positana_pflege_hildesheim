@@ -15,7 +15,7 @@ export const CONTACT = {
   phoneDisplay: "0176 19312010",
   phoneHref: "tel:017619312010",
   phoneE164: "+4917619312010",
-  email: "info@positana-pflege.de",
+  email: "info@positana-pflege-hildesheim.de",
   streetAddress: "Brückenstr. 3",
   postalCode: "31180",
   locality: "Giesen",

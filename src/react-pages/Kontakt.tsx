@@ -125,8 +125,8 @@ const Kontakt = () => {
                 <Mail className="w-5 h-5 text-accent mt-0.5 shrink-0" />
                 <div>
                   <p className="font-semibold">E-Mail</p>
-                  <a href="mailto:info@positana-pflege.de" className="text-muted-foreground hover:text-accent transition-colors">
-                    info@positana-pflege.de
+                  <a href="mailto:info@positana-pflege-hildesheim.de" className="text-muted-foreground hover:text-accent transition-colors">
+                    info@positana-pflege-hildesheim.de
                   </a>
                 </div>
               </div>
